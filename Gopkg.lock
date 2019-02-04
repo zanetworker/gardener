@@ -1592,12 +1592,13 @@
   revision = "4ae6e769426ee1a06523eb30fcb69c0a01f03772"
 
 [[projects]]
-  digest = "1:d1f08fb8a745836e7aef55ecb5a1cdb59d92517a3bd564f356426699314ff6f0"
+  digest = "1:65dc13eb7585ff3674eaf72441bac9bb104ef7a31ce182cf134235e35f4f5436"
   name = "sigs.k8s.io/controller-runtime"
   packages = [
     "pkg/client",
     "pkg/client/apiutil",
     "pkg/client/fake",
+    "pkg/controller/controllerutil",
     "pkg/runtime/log",
   ]
   pruneopts = "NUT"
@@ -1620,6 +1621,7 @@
     "github.com/aliyun/alibaba-cloud-sdk-go/services/vpc",
     "github.com/aws/aws-sdk-go/aws",
     "github.com/aws/aws-sdk-go/aws/awserr",
+    "github.com/aws/aws-sdk-go/aws/client",
     "github.com/aws/aws-sdk-go/aws/credentials",
     "github.com/aws/aws-sdk-go/aws/session",
     "github.com/aws/aws-sdk-go/service/ec2",
@@ -1766,6 +1768,7 @@
     "sigs.k8s.io/controller-runtime/pkg/client",
     "sigs.k8s.io/controller-runtime/pkg/client/apiutil",
     "sigs.k8s.io/controller-runtime/pkg/client/fake",
+    "sigs.k8s.io/controller-runtime/pkg/controller/controllerutil",
   ]
   solver-name = "gps-cdcl"
   solver-version = 1

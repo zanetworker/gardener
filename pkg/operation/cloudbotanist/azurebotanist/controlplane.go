@@ -59,7 +59,7 @@ func (b *AzureBotanist) GenerateCloudProviderConfig() (string, error) {
 		routeTableName      = "routeTableName"
 		securityGroupName   = "securityGroupName"
 	)
-	tf, err := terraformer.NewFromOperation(b.Operation, common.TerraformerPurposeInfra)
+	tf, err := b.NewShootTerraformer(common.TerraformerPurposeInfra)
 	if err != nil {
 		return "", err
 	}

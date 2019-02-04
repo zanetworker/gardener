@@ -42,7 +42,7 @@ func (b *AWSBotanist) GenerateCloudProviderConfig() (string, error) {
 		vpcID    = "vpc_id"
 		subnetID = "subnet_public_utility_z0"
 	)
-	tf, err := terraformer.NewFromOperation(b.Operation, common.TerraformerPurposeInfra)
+	tf, err := b.NewShootTerraformer(common.TerraformerPurposeInfra)
 	if err != nil {
 		return "", err
 	}

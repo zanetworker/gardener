@@ -48,7 +48,7 @@ func (b *OpenStackBotanist) GenerateCloudProviderConfig() (string, error) {
 		floatingNetworkID = "floating_network_id"
 		subnetID          = "subnet_id"
 	)
-	tf, err := terraformer.NewFromOperation(b.Operation, common.TerraformerPurposeInfra)
+	tf, err := b.NewShootTerraformer(common.TerraformerPurposeInfra)
 	if err != nil {
 		return "", err
 	}

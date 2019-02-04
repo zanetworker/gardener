@@ -24,7 +24,6 @@ import (
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/gcpbotanist"
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/openstackbotanist"
 	"github.com/gardener/gardener/pkg/operation/common"
-	"github.com/gardener/gardener/pkg/operation/terraformer"
 	"github.com/gardener/gardener/pkg/utils"
 	corev1 "k8s.io/api/core/v1"
 )
@@ -52,13 +51,13 @@ func (b *Botanist) DestroyExternalDomainDNSRecord() error {
 // DeployDNSRecord kicks off a Terraform job of name <alias> which deploys the DNS record for <name> which
 // will point to <target>.
 func (b *Botanist) DeployDNSRecord(terraformerPurpose, name, target string, purposeInternalDomain bool) error {
-	tf, err := terraformer.NewFromOperation(b.Operation, terraformerPurpose)
+	tf, err := b.NewShootTerraformer(terraformerPurpose)
 	if err != nil {
 		return err
 	}
 	var (
 		chartName         string
-		tfvarsEnvironment []map[string]interface{}
+		tfvarsEnvironment map[string]string
 		targetType, _     = common.IdentifyAddressType(target)
 	)
 
@@ -144,14 +143,14 @@ func (b *Botanist) DeployDNSRecord(terraformerPurpose, name, target string, purp
 
 	return tf.
 		SetVariablesEnvironment(tfvarsEnvironment).
-		DefineConfig(chartName, config).
+		InitializeWith(b.ChartInitializer(chartName, config)).
 		Apply()
 }
 
 // DestroyDNSRecord kicks off a Terraform job which destroys the DNS record.
 func (b *Botanist) DestroyDNSRecord(terraformerPurpose string, purposeInternalDomain bool) error {
 	var (
-		tfvarsEnvironment []map[string]interface{}
+		tfvarsEnvironment map[string]string
 		err               error
 	)
 
@@ -179,7 +178,7 @@ func (b *Botanist) DestroyDNSRecord(terraformerPurpose string, purposeInternalDo
 	default:
 		return nil
 	}
-	tf, err := terraformer.NewFromOperation(b.Operation, terraformerPurpose)
+	tf, err := b.NewShootTerraformer(terraformerPurpose)
 	if err != nil {
 		return err
 	}
@@ -191,7 +190,7 @@ func (b *Botanist) DestroyDNSRecord(terraformerPurpose string, purposeInternalDo
 // GenerateTerraformRoute53VariablesEnvironment generates the environment containing the credentials which
 // are required to validate/apply/destroy the Terraform configuration. These environment must contain
 // Terraform variables which are prefixed with TF_VAR_.
-func (b *Botanist) GenerateTerraformRoute53VariablesEnvironment(purposeInternalDomain bool) ([]map[string]interface{}, error) {
+func (b *Botanist) GenerateTerraformRoute53VariablesEnvironment(purposeInternalDomain bool) (map[string]string, error) {
 	secret, err := b.getDomainCredentials(purposeInternalDomain, awsbotanist.AccessKeyID, awsbotanist.SecretAccessKey)
 	if err != nil {
 		return nil, err
@@ -206,7 +205,7 @@ func (b *Botanist) GenerateTerraformRoute53VariablesEnvironment(purposeInternalD
 // GenerateTerraformAlicloudDNSVariablesEnvironment generates the environment containing the credentials which
 // are required to validate/apply/destroy the Terraform configuration. These environment must contain
 // Terraform variables which are prefixed with TF_VAR_.
-func (b *Botanist) GenerateTerraformAlicloudDNSVariablesEnvironment(purposeInternalDomain bool) ([]map[string]interface{}, error) {
+func (b *Botanist) GenerateTerraformAlicloudDNSVariablesEnvironment(purposeInternalDomain bool) (map[string]string, error) {
 	secret, err := b.getDomainCredentials(purposeInternalDomain, alicloudbotanist.AccessKeyID, alicloudbotanist.AccessKeySecret)
 	if err != nil {
 		return nil, err
@@ -222,7 +221,7 @@ func (b *Botanist) GenerateTerraformAlicloudDNSVariablesEnvironment(purposeInter
 
 // GenerateTerraformCloudDNSVariablesEnvironment generates the environment containing the credentials which
 // Terraform variables which are prefixed with TF_VAR_.
-func (b *Botanist) GenerateTerraformCloudDNSVariablesEnvironment(purposeInternalDomain bool) ([]map[string]interface{}, error) {
+func (b *Botanist) GenerateTerraformCloudDNSVariablesEnvironment(purposeInternalDomain bool) (map[string]string, error) {
 	secret, err := b.getDomainCredentials(purposeInternalDomain, gcpbotanist.ServiceAccountJSON)
 	if err != nil {
 		return nil, err
@@ -235,22 +234,16 @@ func (b *Botanist) GenerateTerraformCloudDNSVariablesEnvironment(purposeInternal
 	if err != nil {
 		return nil, err
 	}
-	return []map[string]interface{}{
-		{
-			"name":  "TF_VAR_SERVICEACCOUNT",
-			"value": minifiedServiceAccount,
-		},
-		{
-			"name":  "GOOGLE_PROJECT",
-			"value": project,
-		},
+	return map[string]string{
+		"TF_VAR_SERVICEACCOUNT": minifiedServiceAccount,
+		"GOOGLE_PROJECT":        project,
 	}, nil
 }
 
 // GenerateTerraformDesignateDNSVariablesEnvironment generates the environment containing the credentials which
 // are required to validate/apply/destroy the Terraform configuration. These environment must contain
 // Terraform variables which are prefixed with TF_VAR_.
-func (b *Botanist) GenerateTerraformDesignateDNSVariablesEnvironment(purposeInternalDomain bool) ([]map[string]interface{}, error) {
+func (b *Botanist) GenerateTerraformDesignateDNSVariablesEnvironment(purposeInternalDomain bool) (map[string]string, error) {
 	secret, err := b.getDomainCredentials(purposeInternalDomain, openstackbotanist.AuthURL, openstackbotanist.DomainName, openstackbotanist.TenantName, openstackbotanist.UserName, openstackbotanist.UserDomainName, openstackbotanist.Password)
 	if err != nil {
 		return nil, err

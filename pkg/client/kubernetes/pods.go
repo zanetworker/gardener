@@ -21,6 +21,7 @@ import (
 	"fmt"
 	"io"
 	"io/ioutil"
+	utilruntime "k8s.io/apimachinery/pkg/util/runtime"
 	"net/http"
 	"sort"
 	"strings"
@@ -92,6 +93,38 @@ func (p *podExecutor) Execute(ctx context.Context, namespace, name, containerNam
 	}
 
 	return &stdout, nil
+}
+
+func NewPodLogGetterForConfig(config *rest.Config) (PodLogGetter, error) {
+	client, err := corev1client.NewForConfig(config)
+	if err != nil {
+		return nil, err
+	}
+	return NewPodLogGetter(client), nil
+}
+
+func NewPodLogGetter(client corev1client.CoreV1Interface) PodLogGetter {
+	return &podLogGetter{client: client}
+}
+
+type PodLogGetter interface {
+	GetPodLogs(namespace, name string, options *corev1.PodLogOptions) ([]byte, error)
+}
+
+type podLogGetter struct {
+	client corev1client.CoreV1Interface
+}
+
+func (p *podLogGetter) GetPodLogs(namespace, name string, options *corev1.PodLogOptions) ([]byte, error) {
+	request := p.client.Pods(namespace).GetLogs(name, options)
+
+	stream, err := request.Stream()
+	if err != nil {
+		return nil, err
+	}
+	defer func() { utilruntime.HandleError(stream.Close()) }()
+
+	return ioutil.ReadAll(stream)
 }
 
 // GetPod will return the Pod object for the given <name> in the given <namespace>.
