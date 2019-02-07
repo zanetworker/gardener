@@ -17,10 +17,11 @@ package operation
 import (
 	"crypto/x509"
 	"fmt"
-	"github.com/gardener/gardener/pkg/operation/terraformer"
 	"path/filepath"
 	"strings"
 	"time"
+
+	"github.com/gardener/gardener/pkg/operation/terraformer"
 
 	gardenv1beta1 "github.com/gardener/gardener/pkg/apis/garden/v1beta1"
 	"github.com/gardener/gardener/pkg/apis/garden/v1beta1/helper"
@@ -361,12 +362,18 @@ func (o *Operation) newTerraformer(purpose, namespace, name string) (*terraforme
 	if err != nil {
 		return nil, err
 	}
-
 	return terraformer.New(o.Logger, o.K8sSeedClient.Client(), podLogGetter, purpose, name, namespace, image.String()), nil
 }
 
 func (o *Operation) NewBackupInfrastructureTerraformer() (*terraformer.Terraformer, error) {
-	return o.newTerraformer(common.TerraformerPurposeBackup, common.GenerateBackupNamespaceName(o.BackupInfrastructure.Name), o.BackupInfrastructure.Name)
+	var backupInfrastructureName string
+	if o.Shoot != nil {
+		backupInfrastructureName = common.GenerateBackupInfrastructureName(o.Shoot.SeedNamespace, o.Shoot.Info.Status.UID)
+	} else {
+		backupInfrastructureName = o.BackupInfrastructure.Name
+	}
+
+	return o.newTerraformer(common.TerraformerPurposeBackup, common.GenerateBackupNamespaceName(backupInfrastructureName), backupInfrastructureName)
 }
 
 func (o *Operation) NewShootTerraformer(purpose string) (*terraformer.Terraformer, error) {

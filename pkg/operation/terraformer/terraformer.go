@@ -18,14 +18,17 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
+	"time"
+
+	rbacv1 "k8s.io/api/rbac/v1"
+
 	kutil "github.com/gardener/gardener/pkg/utils/kubernetes"
 	batchv1 "k8s.io/api/batch/v1"
 	"k8s.io/apimachinery/pkg/api/resource"
 	metav1 "k8s.io/apimachinery/pkg/apis/meta/v1"
 	"k8s.io/apimachinery/pkg/labels"
 	"sigs.k8s.io/controller-runtime/pkg/client"
-	"strings"
-	"time"
 
 	"github.com/gardener/gardener/pkg/client/kubernetes"
 	"github.com/gardener/gardener/pkg/operation/common"
@@ -201,7 +204,50 @@ func (t *Terraformer) execute(ctx context.Context, scriptName string) error {
 	return nil
 }
 
+const (
+	serviceAccountName = "terraformer"
+	roleName           = "garden.sapcloud.io:system:terraformers"
+	roleBindingName    = roleName
+)
+
+func (t *Terraformer) createOrUpdateServiceAccount(ctx context.Context) error {
+	serviceAccount := &corev1.ServiceAccount{ObjectMeta: metav1.ObjectMeta{Namespace: t.namespace, Name: serviceAccountName}}
+	return kutil.CreateOrUpdate(ctx, t.client, serviceAccount, func() error {
+		return nil
+	})
+}
+
+func (t *Terraformer) createOrUpdateRoleBinding(ctx context.Context) error {
+	roleBinding := &rbacv1.RoleBinding{ObjectMeta: metav1.ObjectMeta{Namespace: t.namespace, Name: roleBindingName}}
+	return kutil.CreateOrUpdate(ctx, t.client, roleBinding, func() error {
+		roleBinding.RoleRef = rbacv1.RoleRef{
+			APIGroup: rbacv1.GroupName,
+			Kind:     "ClusterRole",
+			Name:     roleBindingName,
+		}
+		roleBinding.Subjects = []rbacv1.Subject{
+			{
+				Kind:      rbacv1.ServiceAccountKind,
+				Name:      serviceAccountName,
+				Namespace: t.namespace,
+			},
+		}
+		return nil
+	})
+}
+
+func (t *Terraformer) createOrUpdateTerraformerAuth(ctx context.Context) error {
+	if err := t.createOrUpdateServiceAccount(ctx); err != nil {
+		return err
+	}
+	return t.createOrUpdateRoleBinding(ctx)
+}
+
 func (t *Terraformer) deployTerraformerPod(ctx context.Context, scriptName string) error {
+	if err := t.createOrUpdateTerraformerAuth(ctx); err != nil {
+		return err
+	}
+
 	pod := &corev1.Pod{ObjectMeta: metav1.ObjectMeta{Namespace: t.namespace, Name: t.podName}}
 	return kutil.CreateOrUpdate(ctx, t.client, pod, func() error {
 		if pod.Labels == nil {
@@ -214,12 +260,18 @@ func (t *Terraformer) deployTerraformerPod(ctx context.Context, scriptName strin
 }
 
 func (t *Terraformer) deployTerraformerJob(ctx context.Context, scriptName string) error {
+	if err := t.createOrUpdateTerraformerAuth(ctx); err != nil {
+		return err
+	}
+
 	job := &batchv1.Job{ObjectMeta: metav1.ObjectMeta{Namespace: t.namespace, Name: t.jobName}}
+	podSpec := t.podSpec(scriptName)
+
 	return kutil.CreateOrUpdate(ctx, t.client, job, func() error {
 		var (
 			activeDeadlineSeconds = int64(3600)
 			backoffLimit          = int32(3)
-			spec                  = job.Spec
+			spec                  = &job.Spec
 		)
 
 		spec.ActiveDeadlineSeconds = &activeDeadlineSeconds
@@ -229,8 +281,9 @@ func (t *Terraformer) deployTerraformerJob(ctx context.Context, scriptName strin
 				Namespace: t.namespace,
 				Name:      t.jobName,
 			},
-			Spec: *t.podSpec(scriptName),
+			Spec: *podSpec,
 		}
+
 		return nil
 	})
 }
@@ -252,6 +305,10 @@ func (t *Terraformer) podSpec(scriptName string) *corev1.PodSpec {
 		tfVolume      = "tf"
 		tfVarsVolume  = "tfvars"
 		tfStateVolume = "tfstate"
+
+		tfVolumeMountPath      = tfVolume
+		tfVarsVolumeMountPath  = tfVarsVolume
+		tfStateVolumeMountPath = "tf-state-in"
 	)
 
 	activeDeadlineSeconds := int64(1800)
@@ -275,23 +332,23 @@ func (t *Terraformer) podSpec(scriptName string) *corev1.PodSpec {
 				},
 				Resources: corev1.ResourceRequirements{
 					Requests: corev1.ResourceList{
-						corev1.ResourceCPU:    *resource.NewQuantity(50, resource.DecimalSI),
-						corev1.ResourceMemory: *resource.NewQuantity(200, resource.BinarySI),
+						corev1.ResourceCPU:    resource.MustParse("50m"),
+						corev1.ResourceMemory: resource.MustParse("200Mi"),
 					},
 					Limits: corev1.ResourceList{
-						corev1.ResourceCPU:    *resource.NewQuantity(200, resource.DecimalSI),
-						corev1.ResourceMemory: *resource.NewQuantity(512, resource.BinarySI),
+						corev1.ResourceCPU:    resource.MustParse("200m"),
+						corev1.ResourceMemory: resource.MustParse("512Mi"),
 					},
 				},
 				Env: t.env(),
 				VolumeMounts: []corev1.VolumeMount{
-					{Name: tfVolume, MountPath: fmt.Sprintf("/%s", tfVolume)},
-					{Name: tfVarsVolume, MountPath: fmt.Sprintf("/%s", tfVarsVolume)},
-					{Name: tfStateVolume, MountPath: fmt.Sprintf("/%s", tfStateVolume)},
+					{Name: tfVolume, MountPath: fmt.Sprintf("/%s", tfVolumeMountPath)},
+					{Name: tfVarsVolume, MountPath: fmt.Sprintf("/%s", tfVarsVolumeMountPath)},
+					{Name: tfStateVolume, MountPath: fmt.Sprintf("/%s", tfStateVolumeMountPath)},
 				},
 			},
 		},
-		ServiceAccountName: "terraformer",
+		ServiceAccountName: serviceAccountName,
 		Volumes: []corev1.Volume{
 			{
 				Name: tfVolume,

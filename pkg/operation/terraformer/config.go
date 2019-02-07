@@ -17,6 +17,7 @@ package terraformer
 import (
 	"context"
 	"errors"
+
 	kutil "github.com/gardener/gardener/pkg/utils/kubernetes"
 	corev1 "k8s.io/api/core/v1"
 	apierrors "k8s.io/apimachinery/pkg/api/errors"
@@ -118,6 +119,26 @@ func CreateOrUpdateTFVarsSecret(ctx context.Context, c client.Client, namespace,
 		return nil, err
 	}
 	return secret, nil
+}
+
+func DefaultInitializer(c client.Client, main, variables string, tfvars []byte) Initializer {
+	return func(config *InitializerConfig) error {
+		ctx := context.TODO()
+		if _, err := CreateOrUpdateConfigurationConfigMap(ctx, c, config.Namespace, config.ConfigurationName, main, variables); err != nil {
+			return err
+		}
+
+		if _, err := CreateOrUpdateTFVarsSecret(ctx, c, config.Namespace, config.VariablesName, tfvars); err != nil {
+			return err
+		}
+
+		if config.IsStateEmpty {
+			if _, err := CreateOrUpdateStateConfigMap(ctx, c, config.Namespace, config.StateName, ""); err != nil {
+				return err
+			}
+		}
+		return nil
+	}
 }
 
 // prepare checks whether all required ConfigMaps and Secrets exist. It returns the number of
