@@ -6,7 +6,7 @@
     values=yaml.load(open(context.get("values", "")), Loader=yaml.Loader)
 
   if context.get("cloud", "") == "":
-    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet,local} flag")
+    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet,metal,local} flag")
 
   def value(path, default):
     keys=str.split(path, ".")
@@ -40,6 +40,9 @@
     kubernetesVersion="1.14.0"
   elif cloud == "openstack" or cloud == "os":
     region="europe-1"
+    kubernetesVersion="1.14.0"
+  elif cloud == "metal":
+    region="nbg"
     kubernetesVersion="1.14.0"
   elif cloud == "local":
     region="local"
@@ -234,6 +237,31 @@ spec:
       #   effect: NoSchedule
       % endif
       zones: ${value("spec.cloud.gcp.zones", ["europe-west1-b"])}
+    % endif
+    % if cloud == "metal":
+    metal:
+      loadBalancerProvider: ${value("spec.cloud.metal.loadBalancerProvider", "metallb")}
+      networks:<% routerID = value("spec.cloud.metal.networks.router.id", "") %>
+      % if routerID != "":
+        router:
+          id: ${routerID}
+      % else:
+      # router:
+      #   id: 1234
+      % endif
+        workers: ${value("spec.cloud.metal.networks.workers", ["10.250.0.0/19"])}
+      workers:<% workers=value("spec.cloud.metal.workers", []) %>
+      % if workers != []:
+      ${yaml.dump(workers, width=10000)}
+      % else:
+      - name: cpu-worker
+        machineType: c1-xlarge-x86
+        autoScalerMin: 2
+        autoScalerMax: 2
+        maxSurge: 1
+        maxUnavailable: 0
+      % endif
+      zones: ${value("spec.cloud.metal.zones", ["nbg-w8101"])}
     % endif
     % if cloud == "openstack" or cloud == "os":
     openstack:

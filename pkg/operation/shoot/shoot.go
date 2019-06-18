@@ -216,6 +216,16 @@ func (s *Shoot) GetWorkerVolumesByName(workerName string) (ok bool, volumeType, 
 			}
 		}
 	}
+	case gardenv1beta1.CloudProviderMetal:
+		for _, worker := range s.Info.Spec.Cloud.Metal.Workers {
+			if worker.Name == workerName {
+				ok = true
+				volumeType = worker.VolumeType
+				volumeSize = worker.VolumeSize
+				return
+			}
+		}
+	}
 
 	return false, "", "", fmt.Errorf("could not find worker with name %q", workerName)
 }
@@ -235,6 +245,8 @@ func (s *Shoot) GetZones() []string {
 		return s.Info.Spec.Cloud.Alicloud.Zones
 	case gardenv1beta1.CloudProviderPacket:
 		return s.Info.Spec.Cloud.Packet.Zones
+	case gardenv1beta1.CloudProviderMetal:
+		return s.Info.Spec.Cloud.Metal.Zones
 	}
 	return nil
 }

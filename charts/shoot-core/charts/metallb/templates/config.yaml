@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  namespace: kube-system
+  name: metallb-config
+  labels:
+    addonmanager.kubernetes.io/mode: Reconcile
+data:
+  config: |
+    address-pools:
+    - name: default
+      protocol: layer2
+      addresses:
+      - "{{ .Values.externalNetwork }}"

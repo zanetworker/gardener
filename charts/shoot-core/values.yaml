@@ -55,3 +55,8 @@ csi-packet:
     apiToken: secretKeyID
   projectID: projectID
   enabled: false
+metallb:
+  externalNetwork: 192.168.10.0/24
+  images:
+    metallb-speaker: image-repository:image-tag
+    metallb-controller: image-repository:image-tag

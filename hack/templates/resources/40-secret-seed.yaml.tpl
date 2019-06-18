@@ -32,6 +32,8 @@
     entity="Alicloud project"
   elif cloud == "packet":
     entity="Packet project"
+  elif cloud == "metal":
+    entity="Metal tenant"
   elif cloud == "openstack" or cloud == "os":
     entity="OpenStack tenant"
 %>---<% if entity != "": print("# Secret containing cloud provider credentials for " + entity + " into which the Seed cluster have been provisioned.") %>
@@ -75,3 +77,9 @@ data:
   password: ${value("data.password", "base64(password)")}
   % endif
   kubeconfig: ${value("data.kubeconfig", "base64(kubeconfig-for-seed-cluster)")}
+  % if cloud == "metal":
+  tenant: ${value("data.tenant", "base64(tenant)")}
+  metalAPIURL: ${value("data.metalAPIURL", "base64(metal-api-url)")}
+  metalAPIKey: ${value("data.metalAPIKey", "base64(metal-api-key)")}
+  metalAPIHMac: ${value("data.metalAPIHMac", "base64(metal-api-hmac)")}
+  % endif

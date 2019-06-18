@@ -32,6 +32,8 @@
     region="cn-beijing"
   elif cloud == "packet":
     region="ewr1"
+  elif cloud == "metal":
+    region="nbg"
   elif cloud == "openstack" or cloud == "os":
     region="europe-1"
 %>---
@@ -592,3 +594,55 @@ spec:<% caBundle=value("spec.caBundle", "") %>
   # requestTimeout: 180s # Kubernetes OpenStack Cloudprovider Request Timeout
     % endif
   % endif
+  % if cloud == "metal":
+  metal:
+    constraints:
+      dnsProviders:<% dnsProviders=value("spec.metal.constraints.dnsProviders", []) %>
+      % if dnsProviders != []:
+      ${yaml.dump(dnsProviders, width=10000)}
+      % else:
+      - name: cloudflare
+      - name: unmanaged
+      % endif
+      kubernetes:
+        versions:<% kubernetesVersions=value("spec.metal.constraints.kubernetes.versions", []) %>
+        % if kubernetesVersions != []:
+        ${yaml.dump(kubernetesVersions, width=10000)}
+        % else:
+        - 1.13.3
+        % endif
+      loadBalancerProviders:<% loadBalancerProviders=value("spec.metal.constraints.loadBalancerProviders", []) %>
+      % if loadBalancerProviders != []:
+      ${yaml.dump(loadBalancerProviders, width=10000)}
+      % else:
+      - name: metallb
+      % endif
+      machineImages:<% machineImages=value("spec.metal.constraints.machineImages", []) %>
+      % if machineImages != []:
+      ${yaml.dump(machineImages, width=10000)}
+      % else:
+      - name: metal
+        image: ubuntu-19.04
+      % endif
+      machineTypes:<% machineTypes=value("spec.metal.constraints.machineTypes", []) %>
+      % if machineTypes != []:
+      ${yaml.dump(machineTypes, width=10000)}
+      % else:
+      - name: c1-xlarge-x86
+        cpu: "1"
+        gpu: "0"
+        memory: 1Gi
+        usable: true
+        volumeType: default
+        volumeSize: 20Gi
+      % endif
+      zones:<% zones=value("spec.metal.constraints.zones", []) %>
+      % if zones != []:
+      ${yaml.dump(zones, width=10000)}
+      % else:
+      - region: nbg
+        names:
+        - nbg-w8101
+      % endif
+  % endif
+  

@@ -6,7 +6,7 @@
     values=yaml.load(open(context.get("values", "")), Loader=yaml.Loader)
 
   if context.get("cloud", "") == "":
-    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet} flag")
+    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet,metal} flag")
 
   def value(path, default):
     keys=str.split(path, ".")
@@ -32,6 +32,8 @@
     entity="Alicloud project"
   elif cloud == "packet":
     entity="Packet project"
+  elif cloud == "metal":
+    entity="Metal tenant"
   elif cloud == "openstack" or cloud == "os":
     entity="OpenStack tenant"
 %># SecretBindings bind a secret from the same or another namespace together with Quotas from the same or other namespaces.

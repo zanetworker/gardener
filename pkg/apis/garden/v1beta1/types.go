@@ -80,6 +80,9 @@ type CloudProfileSpec struct {
 	// Packet is the profile specification for the Packet cloud.
 	// +optional
 	Packet *PacketProfile `json:"packet,omitempty"`
+	// Metal is the profile specification for the Metal cloud.
+	// +optional
+	Metal *MetalProfile `json:"metal,omitempty"`
 	// CABundle is a certificate bundle which will be installed onto every host machine of the Shoot cluster.
 	// +optional
 	CABundle *string `json:"caBundle,omitempty"`
@@ -271,6 +274,34 @@ type PacketConstraints struct {
 	VolumeTypes []VolumeType `json:"volumeTypes"`
 	// Zones contains constraints regarding allowed values for 'zones' block in the Shoot specification.
 	Zones []Zone `json:"zones"`
+}
+
+// MetalProfile defines certain constraints and definitions for the Metal cloud.
+type MetalProfile struct {
+	// Constraints is an object containing constraints for certain values in the Shoot specification.
+	Constraints MetalConstraints `json:"constraints"`
+}
+
+ // MetalConstraints is an object containing constraints for certain values in the Shoot specification.
+type MetalConstraints struct {
+	// DNSProviders contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.
+	DNSProviders []DNSProviderConstraint `json:"dnsProviders"`
+	// Kubernetes contains constraints regarding allowed values of the 'kubernetes' block in the Shoot specification.
+	Kubernetes KubernetesConstraints `json:"kubernetes"`
+	// LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
+	LoadBalancerProviders []MetalLoadBalancerProvider `json:"loadBalancerProviders"`
+	// MachineImages contains constraints regarding allowed values for machine images in the Shoot specification.
+	MachineImages []MachineImage `json:"machineImages"`
+	// MachineTypes contains constraints regarding allowed values for machine types in the 'workers' block in the Shoot specification.
+	MachineTypes []MachineType `json:"machineTypes"`
+	// Zones contains constraints regarding allowed values for 'zones' block in the Shoot specification.
+	Zones []Zone `json:"zones"`
+}
+
+ // LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
+type MetalLoadBalancerProvider struct {
+	// Name is the name of the load balancer provider.
+	Name string `json:"name"`
 }
 
 // DNSProviderConstraint contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.
@@ -713,6 +744,9 @@ type Cloud struct {
 	// Packet contains the Shoot specification for the Packet cloud.
 	// +optional
 	Packet *PacketCloud `json:"packet,omitempty"`
+	// Metal contains the Shoot specification for the Metal cloud.
+	// +optional
+	Metal *MetalCloud `json:"metal,omitempty"`
 }
 
 // AWSCloud contains the Shoot specification for AWS.
@@ -833,6 +867,33 @@ type PacketWorker struct {
 	VolumeType string `json:"volumeType"`
 	// VolumeSize is the size of the root volume.
 	VolumeSize string `json:"volumeSize"`
+}
+
+// MetalCloud contains the Shoot specification for Metal.
+type MetalCloud struct {
+	// LoadBalancerProvider is the name of the load balancer provider in the Metal environment.
+	LoadBalancerProvider string `json:"loadBalancerProvider"`
+	// MachineImage holds information about the machine image to use for all workers.
+	// It will default to the first image stated in the referenced CloudProfile if no
+	// value has been provided.
+	// +optional
+	MachineImage *MachineImage `json:"machineImage,omitempty"`
+	// Networks holds information about the Kubernetes and infrastructure networks.
+	Networks MetalNetworks `json:"networks"`
+	// Workers is a list of worker groups.
+	Workers []MetalWorker `json:"workers"`
+	// Zones is a list of availability zones to deploy the Shoot cluster to.
+	Zones []string `json:"zones"`
+}
+
+ // MetalNetworks holds information about the Kubernetes and infrastructure networks.
+type MetalNetworks struct {
+	gardencorev1alpha1.K8SNetworks `json:",inline"`
+}
+
+ // MetalWorker is the definition of a worker group.
+type MetalWorker struct {
+	Worker `json:",inline"`
 }
 
 // AzureCloud contains the Shoot specification for Azure.
@@ -1042,6 +1103,9 @@ type Addons struct {
 	// DEPRECATED: This field will be removed in a future version.
 	// +optional
 	Monocular *Monocular `json:"monocular,omitempty"`
+	// MetalLB holds the configuration settings for the MetalLB
+	// +optional
+	MetalLB *MetalLB `json:"metallb,omitempty"`
 }
 
 // Addon also enabling or disabling a specific addon and is used to derive from.
@@ -1084,6 +1148,12 @@ type NginxIngress struct {
 // Monocular describes configuration values for the monocular addon.
 type Monocular struct {
 	Addon `json:",inline"`
+}
+
+type MetalLB struct {
+	Addon `json:",inline"`
+	// ExternalNetwork is the configuration for MetalLB externalNetwork
+	ExternalNetwork string `json:"externalNetwork,omitempty"`
 }
 
 // KubeLego describes configuration values for the kube-lego addon.
@@ -1159,6 +1229,8 @@ const (
 	CloudProviderAlicloud CloudProvider = "alicloud"
 	// CloudProviderPacket is a constant for the Packet cloud provider.
 	CloudProviderPacket CloudProvider = "packet"
+	// CloudProviderMetal is a constant for the Metal cloud provider.
+	CloudProviderMetal CloudProvider = "metal"
 )
 
 // Hibernation contains information whether the Shoot is suspended or not.

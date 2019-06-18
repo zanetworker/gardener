@@ -41,6 +41,9 @@ func (b *HybridBotanist) generateCoreAddonsChart() (*chartrenderer.RenderedChart
 			"kubernetesVersion": b.Shoot.Info.Spec.Kubernetes.Version,
 			"podNetwork":        b.Shoot.GetPodNetwork(),
 		}
+		metallbConfig = map[string]interface{}{
+			"externalNetwork": b.Shoot.Info.Spec.Addons.MetalLB.ExternalNetwork,
+		}
 		calicoConfig = map[string]interface{}{
 			"cloudProvider": b.Shoot.CloudProvider,
 		}
@@ -96,6 +99,11 @@ func (b *HybridBotanist) generateCoreAddonsChart() (*chartrenderer.RenderedChart
 
 	if openvpnDiffieHellmanSecret, ok := b.Secrets[common.GardenRoleOpenVPNDiffieHellman]; ok {
 		vpnShootConfig["diffieHellmanKey"] = openvpnDiffieHellmanSecret.Data["dh2048.pem"]
+	}
+
+	metallb , err := b.InjectShootShootImages(metallbConfig, common.MetallbControllerImageName, common.MetallbSpeaker)
+	if err != nil {
+		return nil, err
 	}
 
 	calico, err := b.InjectShootShootImages(calicoConfig, common.CalicoNodeImageName, common.CalicoCNIImageName, common.CalicoTyphaImageName, common.CalicoKubeControllersImageName)
@@ -155,6 +163,7 @@ func (b *HybridBotanist) generateCoreAddonsChart() (*chartrenderer.RenderedChart
 		"kube-proxy":     kubeProxy,
 		"vpn-shoot":      vpnShoot,
 		"calico":         calico,
+		"metallb": metallb,
 		"metrics-server": metricsServer,
 		"monitoring": map[string]interface{}{
 			"node-exporter":     nodeExporter,

@@ -6,7 +6,7 @@
     values=yaml.load(open(context.get("values", "")), Loader=yaml.Loader)
 
   if context.get("cloud", "") == "":
-    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet} flag")
+    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet,metal} flag")
 
   def value(path, default):
     keys=str.split(path, ".")
@@ -44,6 +44,8 @@
   elif cloud == "packet":
     region="ewr1"
     metadataServiceCIDR="192.80.8.124/32"
+  elif cloud == "metal":
+    region="nbg"
 %># Seed cluster registration manifest into which the control planes of Shoot clusters will be deployed.
 ---
 apiVersion: garden.sapcloud.io/v1beta1

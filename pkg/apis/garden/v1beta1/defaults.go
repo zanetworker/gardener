@@ -114,6 +114,15 @@ func SetDefaults_Shoot(obj *Shoot) {
 		}
 	}
 
+	if cloud.Metal != nil {
+		if cloud.Metal.Networks.Pods == nil {
+			obj.Spec.Cloud.Metal.Networks.Pods = &defaultPodCIDR
+		}
+		if cloud.Metal.Networks.Services == nil {
+			obj.Spec.Cloud.Metal.Networks.Services = &defaultServiceCIDR
+		}
+	}
+	
 	trueVar := true
 	if obj.Spec.Kubernetes.AllowPrivilegedContainers == nil {
 		obj.Spec.Kubernetes.AllowPrivilegedContainers = &trueVar

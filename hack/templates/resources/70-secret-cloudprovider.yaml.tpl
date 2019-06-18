@@ -6,7 +6,7 @@
     values=yaml.load(open(context.get("values", "")), Loader=yaml.Loader)
 
   if context.get("cloud", "") == "":
-    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet} flag")
+    raise Exception("missing --var cloud={aws,azure,gcp,alicloud,openstack,packet,metal} flag")
 
   def value(path, default):
     keys=str.split(path, ".")
@@ -32,6 +32,8 @@
     entity="Alicloud project"
   elif cloud == "packet":
     entity="Packet project"
+  elif cloud == "metal":
+    entity="Metal tenant"
   elif cloud == "openstack" or cloud == "os":
     entity="OpenStack tenant"
 %>---<% if entity != "": print("# Secret containing cloud provider credentials for " + entity + " into which Shoot clusters should be provisioned.") %>
@@ -77,6 +79,12 @@ data:
   tenantName: ${value("data.tenantName", "base64(tenant-name)")}
   username: ${value("data.username", "base64(username)")}
   password: ${value("data.password", "base64(password)")}
+  % endif
+  % if cloud == "metal":
+  tenant: ${value("data.tenant", "base64(tenant)")}
+  metalAPIURL: ${value("data.metalAPIURL", "base64(metal-api-url)")}
+  metalAPIKey: ${value("data.metalAPIKey", "base64(metal-api-key)")}
+  metalAPIHMac: ${value("data.metalAPIHMac", "base64(metal-api-hmac)")}
   % endif
   # If you use your own domain (not the default domain of your landscape) then you have to add additional keys to this secret.
   # The reason is that the DNS management is not part of the Gardener core code base but externalized, hence, it might use other

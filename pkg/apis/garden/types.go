@@ -79,6 +79,9 @@ type CloudProfileSpec struct {
 	// Packet is the profile specification for the Packet cloud.
 	// +optional
 	Packet *PacketProfile
+    // Metal is the profile specification for Metal.
+	// +optional
+	Metal *MetalProfile
 	// CABundle is a certificate bundle which will be installed onto every host machine of the Shoot cluster.
 	// +optional
 	CABundle *string
@@ -270,6 +273,34 @@ type PacketConstraints struct {
 	VolumeTypes []VolumeType
 	// Zones contains constraints regarding allowed values for 'zones' block in the Shoot specification.
 	Zones []Zone
+}
+
+// MetalProfile defines certain constraints and definitions for the Metal cloud.
+type MetalProfile struct {
+	// Constraints is an object containing constraints for certain values in the Shoot specification.
+	Constraints MetalConstraints
+}
+
+ // MetalConstraints is an object containing constraints for certain values in the Shoot specification.
+type MetalConstraints struct {
+	// DNSProviders contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.
+	DNSProviders []DNSProviderConstraint
+	// Kubernetes contains constraints regarding allowed values of the 'kubernetes' block in the Shoot specification.
+	Kubernetes KubernetesConstraints 
+	// LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
+	LoadBalancerProviders []MetalLoadBalancerProvider
+	// MachineImages contains constraints regarding allowed values for machine images in the Shoot specification.
+	MachineImages []MachineImage
+	// MachineTypes contains constraints regarding allowed values for machine types in the 'workers' block in the Shoot specification.
+	MachineTypes []MachineType
+	// Zones contains constraints regarding allowed values for 'zones' block in the Shoot specification.
+	Zones []Zone
+}
+
+ // LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
+type MetalLoadBalancerProvider struct {
+	// Name is the name of the load balancer provider.
+	Name string
 }
 
 // DNSProviderConstraint contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.
@@ -727,6 +758,9 @@ type Cloud struct {
 	// PacketCloud contains the Shoot specification for the Packet cloud.
 	// +optional
 	Packet *PacketCloud
+	// MetalCloud contains the Shoot specification for Metal.
+	// +optional
+	Metal *MetalCloud
 }
 
 // AWSCloud contains the Shoot specification for AWS.
@@ -847,6 +881,33 @@ type PacketWorker struct {
 	VolumeType string
 	// VolumeSize is the size of the root volume.
 	VolumeSize string
+}
+
+// MetalCloud contains the Shoot specification for Metal.
+type MetalCloud struct {
+	// LoadBalancerProvider is the name of the load balancer provider in the Metal environment.
+	LoadBalancerProvider string
+	// MachineImage holds information about the machine image to use for all workers.
+	// It will default to the first image stated in the referenced CloudProfile if no
+	// value has been provided.
+	// +optional
+	MachineImage *MachineImage
+	// Networks holds information about the Kubernetes and infrastructure networks.
+	Networks MetalNetworks
+	// Workers is a list of worker groups.
+	Workers []MetalWorker
+	// Zones is a list of availability zones to deploy the Shoot cluster to.
+	Zones []string
+}
+
+ // MetalNetworks holds information about the Kubernetes and infrastructure networks.
+type MetalNetworks struct {
+	gardencore.K8SNetworks `json:",inline"`
+}
+
+ // MetalWorker is the definition of a worker group.
+type MetalWorker struct {
+	Worker `json:",inline"`
 }
 
 // AzureCloud contains the Shoot specification for Azure.
@@ -1041,6 +1102,9 @@ type Addons struct {
 	// DEPRECATED: This field will be removed in a future version.
 	// +optional
 	Monocular *Monocular
+	// MetalLB holds the configuration settings for the MetalLB
+	// +optional
+	MetalLB *MetalLB
 }
 
 // Addon also enabling or disabling a specific addon and is used to derive from.
@@ -1083,6 +1147,13 @@ type NginxIngress struct {
 // Monocular describes configuration values for the monocular addon.
 type Monocular struct {
 	Addon
+}
+
+// MetalLB describes configuration values for the metallb loadalancer
+type MetalLB struct {
+	Addon
+	// ExternalNetwork is the configuration for MetalLB externalNetwork
+	ExternalNetwork string
 }
 
 // KubeLego describes configuration values for the kube-lego addon.
@@ -1158,6 +1229,8 @@ const (
 	CloudProviderAlicloud CloudProvider = "alicloud"
 	// CloudProviderPacket is a constant for the Packet cloud provider.
 	CloudProviderPacket CloudProvider = "packet"
+	// CloudProviderMetal is a constant for the Metal cloud provider.
+	CloudProviderMetal CloudProvider = "metal"
 )
 
 // Hibernation contains information whether the Shoot is suspended or not.

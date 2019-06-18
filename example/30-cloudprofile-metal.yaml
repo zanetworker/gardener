@@ -1,0 +1,34 @@
+---
+apiVersion: garden.sapcloud.io/v1beta1
+kind: CloudProfile
+metadata:
+  name: metal
+spec:
+# caBundle: |
+#   -----BEGIN CERTIFICATE-----
+#   ...
+#   -----END CERTIFICATE-----
+  metal:
+    constraints:
+      dnsProviders:
+      - name: unmanaged
+      kubernetes:
+        versions:
+        - 1.14.1
+      loadBalancerProviders:
+      - name: metallb
+      machineImages:
+      - name: metal
+        image: ubuntu-19.04
+      machineTypes:
+      - name: c1-xlarge-x86
+        cpu: "4"
+        gpu: "0"
+        memory: 8Gi
+        usable: true
+        volumeType: default
+        volumeSize: 20Gi
+      zones:
+      - region: nbg
+        names:
+        - nbg-w8101

@@ -398,6 +398,12 @@ const (
 	// KubeAddonManagerImageName is the name of the KubeAddonManager image.
 	KubeAddonManagerImageName = "kube-addon-manager"
 
+	// MetallbPeerImageName is the name of the metallb peer image.
+	MetallbSpeaker = "metallb-speaker"
+
+	// MetallbControllerImageName is the name of the metallb controller image
+	MetallbControllerImageName = "metallb-controller"
+
 	// CalicoNodeImageName is the name of the CalicoNode image.
 	CalicoNodeImageName = "calico-node"
 

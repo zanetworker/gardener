@@ -67,6 +67,10 @@ func DetermineCloudProviderInProfile(spec gardenv1beta1.CloudProfileSpec) (garde
 		numClouds++
 		cloud = gardenv1beta1.CloudProviderPacket
 	}
+	if spec.Metal != nil {
+		numClouds++
+		cloud = gardenv1beta1.CloudProviderMetal
+	}
 
 	if numClouds != 1 {
 		return "", errors.New("cloud profile must only contain exactly one field of alicloud/aws/azure/gcp/openstack/packet")
@@ -153,6 +157,10 @@ func GetShootCloudProviderWorkers(cloudProvider gardenv1beta1.CloudProvider, sho
 		for _, worker := range cloud.Packet.Workers {
 			workers = append(workers, worker.Worker)
 		}
+	case gardenv1beta1.CloudProviderMetal:
+		for _, worker := range cloud.Metal.Workers {
+			workers = append(workers, worker.Worker)
+		}
 	}
 
 	return workers
@@ -173,6 +181,8 @@ func GetMachineImageFromShoot(cloudProvider gardenv1beta1.CloudProvider, shoot *
 		return shoot.Spec.Cloud.OpenStack.MachineImage
 	case gardenv1beta1.CloudProviderPacket:
 		return shoot.Spec.Cloud.Packet.MachineImage
+	case gardenv1beta1.CloudProviderMetal:
+		return shoot.Spec.Cloud.Metal.MachineImage
 	}
 	return nil
 }
@@ -202,6 +212,8 @@ func GetMachineTypesFromCloudProfile(cloudProvider gardenv1beta1.CloudProvider, 
 		return profile.Spec.GCP.Constraints.MachineTypes
 	case gardenv1beta1.CloudProviderPacket:
 		return profile.Spec.Packet.Constraints.MachineTypes
+	case gardenv1beta1.CloudProviderMetal:
+		return profile.Spec.Metal.Constraints.MachineTypes
 	case gardenv1beta1.CloudProviderOpenStack:
 		for _, openStackMachineType := range profile.Spec.OpenStack.Constraints.MachineTypes {
 			machineTypes = append(machineTypes, openStackMachineType.MachineType)
@@ -243,9 +255,13 @@ func DetermineCloudProviderInShoot(cloudObj gardenv1beta1.Cloud) (gardenv1beta1.
 		numClouds++
 		cloud = gardenv1beta1.CloudProviderPacket
 	}
+	if cloudObj.Metal != nil {
+		numClouds++
+		cloud = gardenv1beta1.CloudProviderMetal
+	}
 
 	if numClouds != 1 {
-		return "", errors.New("cloud object must only contain exactly one field of aws/azure/gcp/openstack/packet")
+		return "", errors.New("cloud object must only contain exactly one field of aws/azure/gcp/openstack/packet/metal")
 	}
 	return cloud, nil
 }
@@ -274,6 +290,8 @@ func DetermineMachineImage(cloudProfile gardenv1beta1.CloudProfile, name string)
 		machineImages = cloudProfile.Spec.Alicloud.Constraints.MachineImages
 	case gardenv1beta1.CloudProviderPacket:
 		machineImages = cloudProfile.Spec.Packet.Constraints.MachineImages
+	case gardenv1beta1.CloudProviderMetal:
+		machineImages = cloudProfile.Spec.Metal.Constraints.MachineImages
 	default:
 		return false, nil, fmt.Errorf("unknown cloud provider %s", cloudProvider)
 	}
@@ -301,6 +319,8 @@ func UpdateMachineImage(cloudProvider gardenv1beta1.CloudProvider, machineImage 
 		return func(s *gardenv1beta1.Cloud) { s.OpenStack.MachineImage = machineImage }
 	case gardenv1beta1.CloudProviderPacket:
 		return func(s *gardenv1beta1.Cloud) { s.Packet.MachineImage = machineImage }
+	case gardenv1beta1.CloudProviderMetal:
+		return func(s *gardenv1beta1.Cloud) { s.Metal.MachineImage = machineImage }
 	case gardenv1beta1.CloudProviderAlicloud:
 		return func(s *gardenv1beta1.Cloud) { s.Alicloud.MachineImage = machineImage }
 	}
@@ -345,6 +365,10 @@ func DetermineLatestKubernetesVersion(cloudProfile gardenv1beta1.CloudProfile, c
 		}
 	case gardenv1beta1.CloudProviderPacket:
 		for _, version := range cloudProfile.Spec.Packet.Constraints.Kubernetes.Versions {
+			versions = append(versions, version)
+		}
+	case gardenv1beta1.CloudProviderMetal:
+		for _, version := range cloudProfile.Spec.Metal.Constraints.Kubernetes.Versions {
 			versions = append(versions, version)
 		}
 	default:
@@ -644,6 +668,8 @@ func GetK8SNetworks(shoot *gardenv1beta1.Shoot) (*gardencorev1alpha1.K8SNetworks
 		return &shoot.Spec.Cloud.Alicloud.Networks.K8SNetworks, nil
 	case gardenv1beta1.CloudProviderPacket:
 		return &shoot.Spec.Cloud.Packet.Networks.K8SNetworks, nil
+	case gardenv1beta1.CloudProviderMetal:
+		return &shoot.Spec.Cloud.Metal.Networks.K8SNetworks, nil
 	}
 	return &gardencorev1alpha1.K8SNetworks{}, nil
 }
@@ -670,6 +696,8 @@ func GetZones(shoot gardenv1beta1.Shoot, cloudProfile *gardenv1beta1.CloudProfil
 		return gardenv1beta1.CloudProviderAlicloud, cloudProfile.Spec.Alicloud.Constraints.Zones, nil
 	case gardenv1beta1.CloudProviderPacket:
 		return gardenv1beta1.CloudProviderPacket, cloudProfile.Spec.Packet.Constraints.Zones, nil
+	case gardenv1beta1.CloudProviderMetal:
+		return gardenv1beta1.CloudProviderMetal, cloudProfile.Spec.Metal.Constraints.Zones, nil
 	}
 	return "", []gardenv1beta1.Zone{}, nil
 }
@@ -687,5 +715,7 @@ func SetZoneForShoot(shoot *gardenv1beta1.Shoot, cloudProvider gardenv1beta1.Clo
 		shoot.Spec.Cloud.Alicloud.Zones = zones
 	case gardenv1beta1.CloudProviderPacket:
 		shoot.Spec.Cloud.Packet.Zones = zones
+	case gardenv1beta1.CloudProviderMetal:
+		shoot.Spec.Cloud.Metal.Zones = zones
 	}
 }
