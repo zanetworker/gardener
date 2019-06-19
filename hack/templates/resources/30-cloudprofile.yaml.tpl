@@ -601,7 +601,7 @@ spec:<% caBundle=value("spec.caBundle", "") %>
       % if dnsProviders != []:
       ${yaml.dump(dnsProviders, width=10000)}
       % else:
-      - name: cloudflare
+      - name: route53
       - name: unmanaged
       % endif
       kubernetes:
@@ -609,7 +609,7 @@ spec:<% caBundle=value("spec.caBundle", "") %>
         % if kubernetesVersions != []:
         ${yaml.dump(kubernetesVersions, width=10000)}
         % else:
-        - 1.13.3
+        - 1.14.3
         % endif
       loadBalancerProviders:<% loadBalancerProviders=value("spec.metal.constraints.loadBalancerProviders", []) %>
       % if loadBalancerProviders != []:
@@ -645,4 +645,3 @@ spec:<% caBundle=value("spec.caBundle", "") %>
         - nbg-w8101
       % endif
   % endif
-  

@@ -261,6 +261,9 @@ spec:
         maxSurge: 1
         maxUnavailable: 0
       % endif
+      machineImage:
+        name: "metal"
+        image: "ubuntu-19.04"
       zones: ${value("spec.cloud.metal.zones", ["nbg-w8101"])}
     % endif
     % if cloud == "openstack" or cloud == "os":

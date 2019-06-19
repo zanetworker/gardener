@@ -11,10 +11,11 @@ spec:
   metal:
     constraints:
       dnsProviders:
+      - name: route53
       - name: unmanaged
       kubernetes:
         versions:
-        - 1.14.1
+        - 1.14.3
       loadBalancerProviders:
       - name: metallb
       machineImages:
@@ -22,9 +23,9 @@ spec:
         image: ubuntu-19.04
       machineTypes:
       - name: c1-xlarge-x86
-        cpu: "4"
+        cpu: "1"
         gpu: "0"
-        memory: 8Gi
+        memory: 1Gi
         usable: true
         volumeType: default
         volumeSize: 20Gi
