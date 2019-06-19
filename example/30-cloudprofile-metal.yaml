@@ -20,15 +20,13 @@ spec:
       - name: metallb
       machineImages:
       - name: metal
-        image: ubuntu-19.04
+        version: ubuntu-19.04
       machineTypes:
       - name: c1-xlarge-x86
         cpu: "1"
         gpu: "0"
         memory: 1Gi
         usable: true
-        volumeType: default
-        volumeSize: 20Gi
       zones:
       - region: nbg
         names:

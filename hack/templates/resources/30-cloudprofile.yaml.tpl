@@ -622,7 +622,7 @@ spec:<% caBundle=value("spec.caBundle", "") %>
       ${yaml.dump(machineImages, width=10000)}
       % else:
       - name: metal
-        image: ubuntu-19.04
+        version: ubuntu-19.04
       % endif
       machineTypes:<% machineTypes=value("spec.metal.constraints.machineTypes", []) %>
       % if machineTypes != []:
@@ -633,8 +633,6 @@ spec:<% caBundle=value("spec.caBundle", "") %>
         gpu: "0"
         memory: 1Gi
         usable: true
-        volumeType: default
-        volumeSize: 20Gi
       % endif
       zones:<% zones=value("spec.metal.constraints.zones", []) %>
       % if zones != []:
