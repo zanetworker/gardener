@@ -15,9 +15,6 @@
 package metalbotanist
 
 import (
-	"encoding/base64"
-	"fmt"
-
 	gardencorev1alpha1 "github.com/gardener/gardener/pkg/apis/core/v1alpha1"
 	"github.com/gardener/gardener/pkg/operation/common"
 )

@@ -128,6 +128,13 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.Maintenance":                   schema_pkg_apis_garden_v1beta1_Maintenance(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MaintenanceAutoUpdate":         schema_pkg_apis_garden_v1beta1_MaintenanceAutoUpdate(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MaintenanceTimeWindow":         schema_pkg_apis_garden_v1beta1_MaintenanceTimeWindow(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalCloud":                    schema_pkg_apis_garden_v1beta1_MetalCloud(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalConstraints":              schema_pkg_apis_garden_v1beta1_MetalConstraints(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLB":                       schema_pkg_apis_garden_v1beta1_MetalLB(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLoadBalancerProvider":     schema_pkg_apis_garden_v1beta1_MetalLoadBalancerProvider(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalNetworks":                 schema_pkg_apis_garden_v1beta1_MetalNetworks(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalProfile":                  schema_pkg_apis_garden_v1beta1_MetalProfile(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalWorker":                   schema_pkg_apis_garden_v1beta1_MetalWorker(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.Monocular":                     schema_pkg_apis_garden_v1beta1_Monocular(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.NginxIngress":                  schema_pkg_apis_garden_v1beta1_NginxIngress(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.OIDCConfig":                    schema_pkg_apis_garden_v1beta1_OIDCConfig(ref),
@@ -1731,11 +1738,17 @@ func schema_pkg_apis_garden_v1beta1_Addons(ref common.ReferenceCallback) common.
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Monocular"),
 						},
 					},
+					"metallb": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MetalLB holds the configuration settings for the MetalLB",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLB"),
+						},
+					},
 				},
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.AddonClusterAutoscaler", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Heapster", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Kube2IAM", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeLego", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubernetesDashboard", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Monocular", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.NginxIngress"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.AddonClusterAutoscaler", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Heapster", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Kube2IAM", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubeLego", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubernetesDashboard", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLB", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Monocular", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.NginxIngress"},
 	}
 }
 
@@ -2948,12 +2961,18 @@ func schema_pkg_apis_garden_v1beta1_Cloud(ref common.ReferenceCallback) common.O
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.PacketCloud"),
 						},
 					},
+					"metal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Metal contains the Shoot specification for the Metal cloud.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalCloud"),
+						},
+					},
 				},
 				Required: []string{"profile", "region", "secretBindingRef"},
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.AWSCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Alicloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.AzureCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.GCPCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.OpenStackCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.PacketCloud", "k8s.io/api/core/v1.LocalObjectReference"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.AWSCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Alicloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.AzureCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.GCPCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.OpenStackCloud", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.PacketCloud", "k8s.io/api/core/v1.LocalObjectReference"},
 	}
 }
 
@@ -3118,6 +3137,12 @@ func schema_pkg_apis_garden_v1beta1_CloudProfileSpec(ref common.ReferenceCallbac
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.PacketProfile"),
 						},
 					},
+					"metal": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Metal is the profile specification for the Metal cloud.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalProfile"),
+						},
+					},
 					"caBundle": {
 						SchemaProps: spec.SchemaProps{
 							Description: "CABundle is a certificate bundle which will be installed onto every host machine of the Shoot cluster.",
@@ -3129,7 +3154,7 @@ func schema_pkg_apis_garden_v1beta1_CloudProfileSpec(ref common.ReferenceCallbac
 			},
 		},
 		Dependencies: []string{
-			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.AWSProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.AlicloudProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.AzureProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.GCPProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.OpenStackProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.PacketProfile"},
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.AWSProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.AlicloudProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.AzureProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.GCPProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.OpenStackProfile", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.PacketProfile"},
 	}
 }
 
@@ -4477,6 +4502,358 @@ func schema_pkg_apis_garden_v1beta1_MaintenanceTimeWindow(ref common.ReferenceCa
 				Required: []string{"begin", "end"},
 			},
 		},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalCloud(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetalCloud contains the Shoot specification for Metal.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"loadBalancerProvider": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LoadBalancerProvider is the name of the load balancer provider in the Metal environment.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"machineImage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MachineImage holds information about the machine image to use for all workers. It will default to the first image stated in the referenced CloudProfile if no value has been provided.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineImage"),
+						},
+					},
+					"networks": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Networks holds information about the Kubernetes and infrastructure networks.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalNetworks"),
+						},
+					},
+					"workers": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Workers is a list of worker groups.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalWorker"),
+									},
+								},
+							},
+						},
+					},
+					"zones": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Zones is a list of availability zones to deploy the Shoot cluster to.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"loadBalancerProvider", "networks", "workers", "zones"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalNetworks", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalWorker"},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalConstraints(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetalConstraints is an object containing constraints for certain values in the Shoot specification.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"dnsProviders": {
+						SchemaProps: spec.SchemaProps{
+							Description: "DNSProviders contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.DNSProviderConstraint"),
+									},
+								},
+							},
+						},
+					},
+					"kubernetes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Kubernetes contains constraints regarding allowed values of the 'kubernetes' block in the Shoot specification.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubernetesConstraints"),
+						},
+					},
+					"loadBalancerProviders": {
+						SchemaProps: spec.SchemaProps{
+							Description: "LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLoadBalancerProvider"),
+									},
+								},
+							},
+						},
+					},
+					"machineImages": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MachineImages contains constraints regarding allowed values for machine images in the Shoot specification.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineImage"),
+									},
+								},
+							},
+						},
+					},
+					"machineTypes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MachineTypes contains constraints regarding allowed values for machine types in the 'workers' block in the Shoot specification.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineType"),
+									},
+								},
+							},
+						},
+					},
+					"zones": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Zones contains constraints regarding allowed values for 'zones' block in the Shoot specification.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.Zone"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"dnsProviders", "kubernetes", "loadBalancerProviders", "machineImages", "machineTypes", "zones"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.DNSProviderConstraint", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.KubernetesConstraints", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineImage", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineType", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLoadBalancerProvider", "github.com/gardener/gardener/pkg/apis/garden/v1beta1.Zone"},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalLB(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Type: []string{"object"},
+				Properties: map[string]spec.Schema{
+					"enabled": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Enabled indicates whether the addon is enabled or not.",
+							Type:        []string{"boolean"},
+							Format:      "",
+						},
+					},
+					"externalNetwork": {
+						SchemaProps: spec.SchemaProps{
+							Description: "ExternalNetwork is the configuration for MetalLB externalNetwork",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"enabled"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalLoadBalancerProvider(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the load balancer provider.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+				Required: []string{"name"},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalNetworks(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetalNetworks holds information about the Kubernetes and infrastructure networks.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"nodes": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Nodes is the CIDR of the node network.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"pods": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Pods is the CIDR of the pod network.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"services": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Services is the CIDR of the service network.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+				},
+			},
+		},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalProfile(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetalProfile defines certain constraints and definitions for the Metal cloud.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"constraints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Constraints is an object containing constraints for certain values in the Shoot specification.",
+							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalConstraints"),
+						},
+					},
+				},
+				Required: []string{"constraints"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalConstraints"},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalWorker(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetalWorker is the definition of a worker group.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the worker group.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"machineType": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MachineType is the machine type of the worker group.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"autoScalerMin": {
+						SchemaProps: spec.SchemaProps{
+							Description: "AutoScalerMin is the minimum number of VMs to create.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"autoScalerMax": {
+						SchemaProps: spec.SchemaProps{
+							Description: "AutoScalerMin is the maximum number of VMs to create.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+					"maxSurge": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxSurge is maximum number of VMs that are created during an update.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"maxUnavailable": {
+						SchemaProps: spec.SchemaProps{
+							Description: "MaxUnavailable is the maximum number of VMs that can be unavailable during an update.",
+							Ref:         ref("k8s.io/apimachinery/pkg/util/intstr.IntOrString"),
+						},
+					},
+					"annotations": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Annotations is a map of key/value pairs for annotations for all the `Node` objects in this worker pool.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"labels": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Labels is a map of key/value pairs for labels for all the `Node` objects in this worker pool.",
+							Type:        []string{"object"},
+							AdditionalProperties: &spec.SchemaOrBool{
+								Allows: true,
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
+					"taints": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Taints is a list of taints for all the `Node` objects in this worker pool.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("k8s.io/api/core/v1.Taint"),
+									},
+								},
+							},
+						},
+					},
+				},
+				Required: []string{"name", "machineType", "autoScalerMin", "autoScalerMax"},
+			},
+		},
+		Dependencies: []string{
+			"k8s.io/api/core/v1.Taint", "k8s.io/apimachinery/pkg/util/intstr.IntOrString"},
 	}
 }
 

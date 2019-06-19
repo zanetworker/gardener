@@ -68,10 +68,6 @@ func (c *FakeMachineV1alpha1) PacketMachineClasses(namespace string) v1alpha1.Pa
 	return &FakePacketMachineClasses{c, namespace}
 }
 
-func (c *FakeMachineV1alpha1) MetalMachineClasses(namespace string) v1alpha1.MetalMachineClassInterface {
-	return &FakeMetalMachineClasses{c, namespace}
-}
-
 func (c *FakeMachineV1alpha1) Scales(namespace string) v1alpha1.ScaleInterface {
 	return &FakeScales{c, namespace}
 }

@@ -215,13 +215,10 @@ func (s *Shoot) GetWorkerVolumesByName(workerName string) (ok bool, volumeType, 
 				return
 			}
 		}
-	}
 	case gardenv1beta1.CloudProviderMetal:
 		for _, worker := range s.Info.Spec.Cloud.Metal.Workers {
 			if worker.Name == workerName {
 				ok = true
-				volumeType = worker.VolumeType
-				volumeSize = worker.VolumeSize
 				return
 			}
 		}

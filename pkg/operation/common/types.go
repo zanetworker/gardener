@@ -485,6 +485,9 @@ const (
 	// PacketControllerManagerImageName is the name of the PacketControllerManager image.
 	PacketControllerManagerImageName = "packet-controller-manager"
 
+	// MetalControllerManagerImageName is the name of the MetalControllerManager image.
+	MetalControllerManagerImageName = "metal-controller-manager"
+
 	// CSI Images
 
 	// CSIAttacherImageName is the name of csi attacher - https://github.com/kubernetes-csi/external-attacher
