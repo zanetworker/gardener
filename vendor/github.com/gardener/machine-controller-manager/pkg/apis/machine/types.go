@@ -71,6 +71,18 @@ type MachineSpec struct {
 	// ProviderID represents the provider's unique ID given to a machine
 	// +optional
 	ProviderID string
+
+	// +optional
+	NodeTemplateSpec NodeTemplateSpec
+}
+
+// NodeTemplateSpec describes the data a node should have when created from a template
+type NodeTemplateSpec struct {
+	// +optional
+	metav1.ObjectMeta
+
+	// +optional
+	Spec corev1.NodeSpec
 }
 
 // MachineTemplateSpec describes the data a machine should have when created from a template
@@ -1214,8 +1226,8 @@ type PacketMachineClassSpec struct {
 	OS           string   // required
 	ProjectID    string   // required
 	BillingCycle string
-	Tags         map[string]string
-	SSHKeys      []PacketSSHKeySpec
+	Tags         []string
+	SSHKeys      []string
 	UserData     string
 
 	SecretRef *corev1.SecretReference
@@ -1227,4 +1239,49 @@ type PacketMachineClassSpec struct {
 type PacketSSHKeySpec struct {
 	ID          string
 	Fingerprint string
+}
+
+/********************** MetalMachineClass APIs ***************/
+
+// +genclient
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// MetalMachineClass TODO
+type MetalMachineClass struct {
+	// +optional
+	metav1.ObjectMeta
+
+	// +optional
+	metav1.TypeMeta
+
+	// +optional
+	Spec MetalMachineClassSpec
+}
+
+// +k8s:deepcopy-gen:interfaces=k8s.io/apimachinery/pkg/runtime.Object
+
+// MetalMachineClassList is a collection of MetalMachineClasses.
+type MetalMachineClassList struct {
+	// +optional
+	metav1.TypeMeta
+
+	// +optional
+	metav1.ListMeta
+
+	// +optional
+	Items []MetalMachineClass
+}
+
+// MetalMachineClassSpec is the specification of a cluster.
+type MetalMachineClassSpec struct {
+	Partition string // required
+	Size      string // required
+	Image     string // required
+	Tenant    string // required
+	Project   string // required
+	Tags      []string
+	SSHKeys   []string
+	UserData  string
+
+	SecretRef *corev1.SecretReference
 }
