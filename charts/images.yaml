@@ -133,6 +133,12 @@ images:
   repository: docker.io/packethost/csi-packet
   tag: "73641b0"
 
+# Metal Controller Manager
+- name: metal-controller-manager
+  sourceRepository: https://github.com/metal-pod/metal-ccm
+  repository: docker.io/metalpod/metal-ccm
+  tag: "latest"
+
 # Shoot optional addons
 - name: kubernetes-dashboard
   sourceRepository: github.com/kubernetes/dashboard

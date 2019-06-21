@@ -24,6 +24,11 @@ ignored = [
   name = "github.com/gardener/gardener-extensions"
   revision = "f09dd7bc8d2fee9f4cfff1d95d39e7713728bf81"
 
+# Only temporarily needed for migration purposes
+[[constraint]]
+  name = "github.com/metal-pod/gardener-extension-provider-metal"
+  revision = "cd5356483498255a4c2607db01cf8d5298a75a71"
+
 [[override]]
   name = "k8s.io/api"
   version = "kubernetes-1.14.0"
@@ -179,4 +184,3 @@ ignored = [
     name = "k8s.io/kube-openapi"
     unused-packages = false
     non-go = false
-

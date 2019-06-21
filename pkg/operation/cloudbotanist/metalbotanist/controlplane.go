@@ -96,10 +96,10 @@ func (b *MetalBotanist) GenerateCSIConfig() (map[string]interface{}, error) {
 func getMetalCredentialsEnvironment() []map[string]interface{} {
 	return []map[string]interface{}{
 		{
-			"name": "METAL_API_KEY",
+			"name": "METAL_API_HMAC",
 			"valueFrom": map[string]interface{}{
 				"secretKeyRef": map[string]interface{}{
-					"key":  MetalAPIKey,
+					"key":  MetalAPIHMac,
 					"name": gardencorev1alpha1.SecretNameCloudProvider,
 				},
 			},
