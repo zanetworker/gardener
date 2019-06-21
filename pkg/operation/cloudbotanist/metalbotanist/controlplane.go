@@ -115,14 +115,15 @@ func (b *MetalBotanist) GenerateEtcdBackupConfig() (map[string][]byte, map[strin
 	return secretData, backupConfigData, nil
 }
 
+// FIXME: rancher local path storage is not really what we should aim for
 // GenerateETCDStorageClassConfig generates values which are required to create etcd volume storageclass properly.
 func (b *MetalBotanist) GenerateETCDStorageClassConfig() map[string]interface{} {
 	return map[string]interface{}{
 		"name":        "gardener.cloud-fast",
 		"capacity":    "25Gi",
-		"provisioner": "net.metal.csi",
+		"provisioner": "rancher.io/local-path",
 		"parameters": map[string]interface{}{
-			"plan": "standard",
+			"volumeBindingMode": "WaitForFirstConsumer",
 		},
 	}
 }

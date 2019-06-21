@@ -177,8 +177,8 @@ func ValidateCloudProfileSpec(spec *garden.CloudProfileSpec, fldPath *field.Path
 
 	if spec.Metal != nil {
 		allErrs = append(allErrs, validateKubernetesConstraints(spec.Metal.Constraints.Kubernetes, fldPath.Child("metal", "constraints", "kubernetes"))...)
-		allErrs = append(allErrs, validateMachineImages(spec.Packet.Constraints.MachineImages, fldPath.Child("metal", "constraints", "machineImages"))...)
-		allErrs = append(allErrs, validateMachineTypeConstraints(spec.Packet.Constraints.MachineTypes, fldPath.Child("metal", "constraints", "machineTypes"))...)
+		allErrs = append(allErrs, validateMachineImages(spec.Metal.Constraints.MachineImages, fldPath.Child("metal", "constraints", "machineImages"))...)
+		allErrs = append(allErrs, validateMachineTypeConstraints(spec.Metal.Constraints.MachineTypes, fldPath.Child("metal", "constraints", "machineTypes"))...)
 		allErrs = append(allErrs, validateZones(spec.Metal.Constraints.Zones, fldPath.Child("metal", "constraints", "zones"))...)
 	}
 
@@ -1348,13 +1348,13 @@ func validateCloud(cloud garden.Cloud, fldPath *field.Path) field.ErrorList {
 			return allErrs
 		}
 
- 		workersPath := metalPath.Child("workers")
+		workersPath := metalPath.Child("workers")
 		if len(metal.Workers) == 0 {
 			allErrs = append(allErrs, field.Required(workersPath, "must specify at least one worker"))
 			return allErrs
 		}
 
- 		var workers []garden.Worker
+		var workers []garden.Worker
 		for i, worker := range metal.Workers {
 			idxPath := workersPath.Index(i)
 			allErrs = append(allErrs, ValidateWorker(worker.Worker, idxPath)...)
