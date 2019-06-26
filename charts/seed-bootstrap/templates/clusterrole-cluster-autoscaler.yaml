@@ -11,6 +11,7 @@ rules:
   - azuremachineclasses
   - gcpmachineclasses
   - packetmachineclasses
+  - metalmachineclasses
   - openstackmachineclasses
   - machinedeployments
   - machines
