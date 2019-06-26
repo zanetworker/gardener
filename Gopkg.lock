@@ -240,14 +240,14 @@
   revision = "f09dd7bc8d2fee9f4cfff1d95d39e7713728bf81"
 
 [[projects]]
-  digest = "1:ee70d8afe5ef02ac7f728509893cb861fd0f0869082ad1b712ce5b0784069418"
+  digest = "1:0e6b220b625ebfe66249fbb52fa8c38e3450e9d605214d86e948b731e106c92e"
   name = "github.com/gardener/machine-controller-manager"
   packages = [
     "pkg/apis/machine",
     "pkg/apis/machine/v1alpha1",
   ]
   pruneopts = "NUT"
-  revision = "052c7e8a36509a335e8fa830299d54de226b7999"
+  revision = "4a824c6ef5810f8e11bd4480a519b7d17ba26ecc"
   source = "github.com/majst01/machine-controller-manager"
 
 [[projects]]
@@ -750,37 +750,6 @@
   packages = ["."]
   pruneopts = "NUT"
   revision = "48954b6210f8d154cb5f8484d3a3e1f83489309e"
-
-[[projects]]
-  digest = "1:22f696cee54865fb8e9ff91df7b633f6b8f22037a8015253c6b6a71ca82219c7"
-  name = "go.uber.org/atomic"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
-  version = "v1.3.2"
-
-[[projects]]
-  digest = "1:58ca93bdf81bac106ded02226b5395a0595d5346cdc4caa8d9c1f3a5f8f9976e"
-  name = "go.uber.org/multierr"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
-  version = "v1.1.0"
-
-[[projects]]
-  digest = "1:85674ac609b704fd4e9f463553b6ffc3a3527a993ae0ba550eb56beaabdfe094"
-  name = "go.uber.org/zap"
-  packages = [
-    ".",
-    "buffer",
-    "internal/bufferpool",
-    "internal/color",
-    "internal/exit",
-    "zapcore",
-  ]
-  pruneopts = "NUT"
-  revision = "ff33455a0e382e8a81d14dd7c922020b6b5e7982"
-  version = "v1.9.1"
 
 [[projects]]
   digest = "1:ed47bea400ebfd3c4eb7b7497e4004482fea5fc060e7dde85d5f21fcfc272f20"
@@ -1616,7 +1585,8 @@
     "pkg/client",
     "pkg/client/apiutil",
     "pkg/client/fake",
-    "pkg/runtime/log",
+    "pkg/internal/objectutil",
+    "pkg/manager/signals",
     "pkg/runtime/signals",
   ]
   pruneopts = "NUT"
