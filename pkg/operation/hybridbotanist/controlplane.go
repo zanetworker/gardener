@@ -114,7 +114,7 @@ func (b *HybridBotanist) DeployETCDStorageClass(ctx context.Context) error {
 }
 
 // DeployETCD deploys two etcd clusters via StatefulSets. The first etcd cluster (called 'main') is used for all the
-// data the Shoot Kubernetes cluster needs to store, whereas the second etcd luster (called 'events') is only used to
+// data the Shoot Kubernetes cluster needs to store, whereas the second etcd cluster (called 'events') is only used to
 // store the events data. The objectstore is also set up to store the backups.
 func (b *HybridBotanist) DeployETCD() error {
 	secretData, backupConfigData, err := b.SeedCloudBotanist.GenerateEtcdBackupConfig()
