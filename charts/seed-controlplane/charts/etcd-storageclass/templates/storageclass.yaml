@@ -8,3 +8,6 @@ parameters:
 {{- if $.Values.parameters }}
 {{ toYaml $.Values.parameters | indent 2 }}
 {{- end }}
+{{- if $.Values.volumeBindingMode }}
+volumeBindingMode: {{ $.Values.volumeBindingMode }}
+{{- end }}

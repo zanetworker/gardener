@@ -119,12 +119,10 @@ func (b *MetalBotanist) GenerateEtcdBackupConfig() (map[string][]byte, map[strin
 // GenerateETCDStorageClassConfig generates values which are required to create etcd volume storageclass properly.
 func (b *MetalBotanist) GenerateETCDStorageClassConfig() map[string]interface{} {
 	return map[string]interface{}{
-		"name":        "gardener.cloud-fast",
-		"capacity":    "25Gi",
-		"provisioner": "rancher.io/local-path",
-		"parameters": map[string]interface{}{
-			"volumeBindingMode": "WaitForFirstConsumer",
-		},
+		"name":              "gardener.cloud-fast",
+		"capacity":          "25Gi",
+		"provisioner":       "rancher.io/local-path",
+		"volumeBindingMode": "WaitForFirstConsumer",
 	}
 }
 
