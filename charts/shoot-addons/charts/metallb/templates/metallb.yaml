@@ -27,7 +27,7 @@ spec:
       hostNetwork: true
       containers:
         - name: speaker
-          image:  {{ index .Values.images "metallb" }}
+          image:  {{ index .Values.images "metallb-speaker" }}
           imagePullPolicy: IfNotPresent
           args:
             - --port=7472
@@ -85,7 +85,7 @@ spec:
         runAsUser: 65534 # nobody
       containers:
         - name: controller
-          image: {{ index .Values.images "metallb" }}
+          image: {{ index .Values.images "metallb-controller" }}
           imagePullPolicy: IfNotPresent
           args:
             - --port=7472
