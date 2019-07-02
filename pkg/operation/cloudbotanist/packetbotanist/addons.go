@@ -72,3 +72,8 @@ func (b *PacketBotanist) GenerateVPNShootConfig() (map[string]interface{}, error
 	}
 	return config, nil
 }
+
+// GenerateMetalLBConfig generates values which are required to render the chart metallb properly.
+func (b *PacketBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) {
+	return common.GenerateAddonConfig(nil, b.Shoot.MetalLBEnabled()), nil
+}

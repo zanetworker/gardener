@@ -2,7 +2,7 @@
 apiVersion: apps/v1beta2
 kind: DaemonSet
 metadata:
-  namespace: kube-system
+  namespace: metallb-system
   name: metallb-speaker
   labels:
     addonmanager.kubernetes.io/mode: Reconcile
@@ -58,7 +58,7 @@ spec:
 apiVersion: apps/v1beta2
 kind: Deployment
 metadata:
-  namespace: kube-system
+  namespace: metallb-system
   name: metallb-controller
   labels:
     addonmanager.kubernetes.io/mode: Reconcile

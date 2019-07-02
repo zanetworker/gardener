@@ -131,6 +131,7 @@ func GetOpenAPIDefinitions(ref common.ReferenceCallback) map[string]common.OpenA
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalCloud":                    schema_pkg_apis_garden_v1beta1_MetalCloud(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalConstraints":              schema_pkg_apis_garden_v1beta1_MetalConstraints(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLB":                       schema_pkg_apis_garden_v1beta1_MetalLB(ref),
+		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLBNetwork":                schema_pkg_apis_garden_v1beta1_MetalLBNetwork(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLoadBalancerProvider":     schema_pkg_apis_garden_v1beta1_MetalLoadBalancerProvider(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalNetworks":                 schema_pkg_apis_garden_v1beta1_MetalNetworks(ref),
 		"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalProfile":                  schema_pkg_apis_garden_v1beta1_MetalProfile(ref),
@@ -4658,7 +4659,8 @@ func schema_pkg_apis_garden_v1beta1_MetalLB(ref common.ReferenceCallback) common
 	return common.OpenAPIDefinition{
 		Schema: spec.Schema{
 			SchemaProps: spec.SchemaProps{
-				Type: []string{"object"},
+				Description: "MetalLB describes configuration values for the metallb addon.",
+				Type:        []string{"object"},
 				Properties: map[string]spec.Schema{
 					"enabled": {
 						SchemaProps: spec.SchemaProps{
@@ -4667,15 +4669,51 @@ func schema_pkg_apis_garden_v1beta1_MetalLB(ref common.ReferenceCallback) common
 							Format:      "",
 						},
 					},
-					"externalNetwork": {
+					"networks": {
 						SchemaProps: spec.SchemaProps{
-							Description: "ExternalNetwork is the configuration for MetalLB externalNetwork",
-							Type:        []string{"string"},
-							Format:      "",
+							Description: "Networks is the configuration for MetalLB networks.",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Ref: ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLBNetwork"),
+									},
+								},
+							},
 						},
 					},
 				},
 				Required: []string{"enabled"},
+			},
+		},
+		Dependencies: []string{
+			"github.com/gardener/gardener/pkg/apis/garden/v1beta1.MetalLBNetwork"},
+	}
+}
+
+func schema_pkg_apis_garden_v1beta1_MetalLBNetwork(ref common.ReferenceCallback) common.OpenAPIDefinition {
+	return common.OpenAPIDefinition{
+		Schema: spec.Schema{
+			SchemaProps: spec.SchemaProps{
+				Description: "MetalLBNetwork contains the network name and number of IPs to acquire.",
+				Type:        []string{"object"},
+				Properties: map[string]spec.Schema{
+					"name": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Name is the name of the network.",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"count": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Count is the number of IPs to acquire.",
+							Type:        []string{"integer"},
+							Format:      "int32",
+						},
+					},
+				},
+				Required: []string{"name", "count"},
 			},
 		},
 	}

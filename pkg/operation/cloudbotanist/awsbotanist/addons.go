@@ -187,3 +187,8 @@ func (b *AWSBotanist) GenerateNginxIngressConfig() (map[string]interface{}, erro
 func (b *AWSBotanist) GenerateVPNShootConfig() (map[string]interface{}, error) {
 	return nil, nil
 }
+
+// GenerateMetalLBConfig generates values which are required to render the chart metallb properly.
+func (b *AWSBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) {
+	return common.GenerateAddonConfig(nil, b.Shoot.MetalLBEnabled()), nil
+}

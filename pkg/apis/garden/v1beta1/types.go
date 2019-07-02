@@ -282,7 +282,7 @@ type MetalProfile struct {
 	Constraints MetalConstraints `json:"constraints"`
 }
 
- // MetalConstraints is an object containing constraints for certain values in the Shoot specification.
+// MetalConstraints is an object containing constraints for certain values in the Shoot specification.
 type MetalConstraints struct {
 	// DNSProviders contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.
 	DNSProviders []DNSProviderConstraint `json:"dnsProviders"`
@@ -298,7 +298,7 @@ type MetalConstraints struct {
 	Zones []Zone `json:"zones"`
 }
 
- // LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
+// LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
 type MetalLoadBalancerProvider struct {
 	// Name is the name of the load balancer provider.
 	Name string `json:"name"`
@@ -886,12 +886,12 @@ type MetalCloud struct {
 	Zones []string `json:"zones"`
 }
 
- // MetalNetworks holds information about the Kubernetes and infrastructure networks.
+// MetalNetworks holds information about the Kubernetes and infrastructure networks.
 type MetalNetworks struct {
 	gardencorev1alpha1.K8SNetworks `json:",inline"`
 }
 
- // MetalWorker is the definition of a worker group.
+// MetalWorker is the definition of a worker group.
 type MetalWorker struct {
 	Worker `json:",inline"`
 }
@@ -1150,10 +1150,19 @@ type Monocular struct {
 	Addon `json:",inline"`
 }
 
+// MetalLB describes configuration values for the metallb addon.
 type MetalLB struct {
 	Addon `json:",inline"`
-	// ExternalNetwork is the configuration for MetalLB externalNetwork
-	ExternalNetwork string `json:"externalNetwork,omitempty"`
+	// Networks is the configuration for MetalLB networks.
+	Networks []MetalLBNetwork `json:"networks,omitempty"`
+}
+
+// MetalLBNetwork contains the network name and number of IPs to acquire.
+type MetalLBNetwork struct {
+	// Name is the name of the network.
+	Name string `json:"name"`
+	// Count is the number of IPs to acquire.
+	Count int `json:"count"`
 }
 
 // KubeLego describes configuration values for the kube-lego addon.

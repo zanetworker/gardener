@@ -41,9 +41,8 @@ func (b *HybridBotanist) generateCoreAddonsChart() (*chartrenderer.RenderedChart
 			"kubernetesVersion": b.Shoot.Info.Spec.Kubernetes.Version,
 			"podNetwork":        b.Shoot.GetPodNetwork(),
 		}
-
 		metallbConfig = map[string]interface{}{
-			"externalNetwork": b.Shoot.Info.Spec.Addons.MetalLB.ExternalNetwork,
+			"networks": b.Shoot.Info.Spec.Addons.MetalLB.Networks,
 		}
 		calicoConfig = map[string]interface{}{
 			"cloudProvider": b.Shoot.CloudProvider,
@@ -102,7 +101,7 @@ func (b *HybridBotanist) generateCoreAddonsChart() (*chartrenderer.RenderedChart
 		vpnShootConfig["diffieHellmanKey"] = openvpnDiffieHellmanSecret.Data["dh2048.pem"]
 	}
 
-	metallb, err := b.InjectShootShootImages(metallbConfig, common.MetallbControllerImageName, common.MetallbSpeaker)
+	metallb, err := b.InjectShootShootImages(metallbConfig, common.MetallbControllerImageName, common.MetallbSpeakerImageName)
 	if err != nil {
 		return nil, err
 	}
@@ -193,6 +192,10 @@ func (b *HybridBotanist) generateOptionalAddonsChart() (*chartrenderer.RenderedC
 	if err != nil {
 		return nil, err
 	}
+	metallbConfig, err := b.ShootCloudBotanist.GenerateMetalLBConfig()
+	if err != nil {
+		return nil, err
+	}
 	if b.Shoot.NginxIngressEnabled() {
 		nginxIngressConfig = utils.MergeMaps(nginxIngressConfig, map[string]interface{}{
 			"controller": map[string]interface{}{
@@ -232,6 +235,10 @@ func (b *HybridBotanist) generateOptionalAddonsChart() (*chartrenderer.RenderedC
 	if err != nil {
 		return nil, err
 	}
+	metallb, err := b.InjectShootShootImages(metallbConfig, common.MetallbControllerImageName, common.MetallbSpeakerImageName)
+	if err != nil {
+		return nil, err
+	}
 
 	// From https://github.com/kubernetes/kubernetes/blob/677f740adf61f9c56d0719eacabfeae3b0787256/cluster/addons/addon-manager/README.md:
 	// "Addons with label addonmanager.kubernetes.io/mode=EnsureExists will be checked for existence only. Users can edit these addons as they want. In particular:"
@@ -256,6 +263,7 @@ func (b *HybridBotanist) generateOptionalAddonsChart() (*chartrenderer.RenderedC
 		"kube2iam":             kube2IAM,
 		"kubernetes-dashboard": kubernetesDashboard,
 		"nginx-ingress":        nginxIngress,
+		"metallb":              metallb,
 	})
 }
 

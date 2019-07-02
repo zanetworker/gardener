@@ -66,6 +66,14 @@
   version = "v1.9.6"
 
 [[projects]]
+  digest = "1:5a23cd3a5496a0b2da7e3b348d14e77b11a210738c398200d7d6f04ea8cf3bd8"
+  name = "github.com/asaskevich/govalidator"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "ccb8e960c48f04d6935e72476ae4a51028f9e22f"
+  version = "v9"
+
+[[projects]]
   digest = "1:91af1a47b5945b5f721c22df11a7a50bb42b296c81d26ff3aac99ed7cf04037e"
   name = "github.com/aws/aws-sdk-go"
   packages = [
@@ -146,6 +154,14 @@
   pruneopts = "NUT"
   revision = "8991bc29aa16c548c550c7ff78260e27b9ab7c73"
   version = "v1.1.1"
+
+[[projects]]
+  digest = "1:7a6852b35eb5bbc184561443762d225116ae630c26a7c4d90546619f1e7d2ad2"
+  name = "github.com/dgrijalva/jwt-go"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "06ea1031745cb8b3dab3f6a236daf2b0aa468b7e"
+  version = "v3.2.0"
 
 [[projects]]
   branch = "master"
@@ -240,14 +256,14 @@
   revision = "f09dd7bc8d2fee9f4cfff1d95d39e7713728bf81"
 
 [[projects]]
-  digest = "1:0e6b220b625ebfe66249fbb52fa8c38e3450e9d605214d86e948b731e106c92e"
+  digest = "1:ee70d8afe5ef02ac7f728509893cb861fd0f0869082ad1b712ce5b0784069418"
   name = "github.com/gardener/machine-controller-manager"
   packages = [
     "pkg/apis/machine",
     "pkg/apis/machine/v1alpha1",
   ]
   pruneopts = "NUT"
-  revision = "4a824c6ef5810f8e11bd4480a519b7d17ba26ecc"
+  revision = "052c7e8a36509a335e8fa830299d54de226b7999"
   source = "github.com/majst01/machine-controller-manager"
 
 [[projects]]
@@ -259,12 +275,58 @@
   version = "v1.0.0"
 
 [[projects]]
+  branch = "master"
+  digest = "1:ce0cdcf4a121add67d3c6f7cc08e6233275d0f417852f025b790d35da88fab10"
+  name = "github.com/globalsign/mgo"
+  packages = [
+    "bson",
+    "internal/json",
+  ]
+  pruneopts = "NUT"
+  revision = "eeefdecb41b842af6dc652aaea4026e8403e62df"
+
+[[projects]]
   digest = "1:d74ba1aea6244ead12e4f16d5f61a15ced9a2f2d1cae2021fbb76088b27e7afa"
   name = "github.com/go-ini/ini"
   packages = ["."]
   pruneopts = "NUT"
   revision = "c85607071cf08ca1adaf48319cd1aa322e81d8c1"
   version = "v1.42.0"
+
+[[projects]]
+  digest = "1:53becd66889185091b58ea3fc49294996f2179fb05a89702f4de7d15e581b509"
+  name = "github.com/go-logr/logr"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "9fb12b3b21c5415d16ac18dc5cd42c1cfdd40c4e"
+  version = "v0.1.0"
+
+[[projects]]
+  digest = "1:340497a512995aa69c0add901d79a2096b3449d35a44a6f1f1115091a9f8c687"
+  name = "github.com/go-logr/zapr"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "03f06a783fbb7dfaf3f629c7825480e43a7105e6"
+  version = "v0.1.1"
+
+[[projects]]
+  digest = "1:e101aa2e25fac7e82ba4d2f66807eedd4bcf11abc5afcb4a4629a88f9a652b84"
+  name = "github.com/go-openapi/analysis"
+  packages = [
+    ".",
+    "internal",
+  ]
+  pruneopts = "NUT"
+  revision = "147e766af12c74c10c633436007317dbcd9abb0b"
+  version = "v0.19.2"
+
+[[projects]]
+  digest = "1:561157070be37514e296bbf1144e5e3130573483e253443bf378917475f55836"
+  name = "github.com/go-openapi/errors"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "0b2a0a1f89aa2eec2d13e03cd80ab0fdaf01f8ce"
+  version = "v0.19.2"
 
 [[projects]]
   digest = "1:260f7ebefc63024c8dfe2c9f1a2935a89fa4213637a1f522f592f80c001cc441"
@@ -283,11 +345,44 @@
   version = "v0.19.0"
 
 [[projects]]
+  digest = "1:c3cb0571346173abe3b329baf50e5ca05d2d1640cfe2817c65ed377e44c34afc"
+  name = "github.com/go-openapi/loads"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "8548893a17237be4a5b2f74773f23002f4179bbe"
+  version = "v0.19.2"
+
+[[projects]]
+  digest = "1:f5721118d4b820301fc735f0a0d73b673bbf9cc16b5f6fc362f5a94d5741f28f"
+  name = "github.com/go-openapi/runtime"
+  packages = [
+    ".",
+    "client",
+    "logger",
+    "middleware",
+    "middleware/denco",
+    "middleware/header",
+    "middleware/untyped",
+    "security",
+  ]
+  pruneopts = "NUT"
+  revision = "1c4afa5263ac1b091911b4f2440b6ae406fc31e1"
+  version = "v0.19.2"
+
+[[projects]]
   digest = "1:8f80caf2fa31f78a035f33981c9685013033073b53f344f579e60fa69f0c6670"
   name = "github.com/go-openapi/spec"
   packages = ["."]
   pruneopts = "NUT"
   revision = "53d776530bf78a11b03a7b52dd8a083086b045e5"
+  version = "v0.19.0"
+
+[[projects]]
+  digest = "1:60aff2b170a49776659202b25183974d06afea5641bf92c2c8525bbe67ffde6a"
+  name = "github.com/go-openapi/strfmt"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "29177d4b5db488583bb97ebc05d3842ebeda91a8"
   version = "v0.19.0"
 
 [[projects]]
@@ -297,6 +392,14 @@
   pruneopts = "NUT"
   revision = "b3e2804c8535ee0d1b89320afd98474d5b8e9e3b"
   version = "v0.19.0"
+
+[[projects]]
+  digest = "1:9a32276054d546a6000ef4fe0465ee177012674e387cdf47c2ec8b7d6c4713cf"
+  name = "github.com/go-openapi/validate"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "6405b9095e4c96aabb45856da08a9323d50d9336"
+  version = "v0.19.2"
 
 [[projects]]
   digest = "1:6a7159c5f8f8826207545407a458b43ab6599c1c8a2271465c2e979ecea1dcd4"
@@ -495,6 +598,19 @@
   version = "v1.0.2"
 
 [[projects]]
+  digest = "1:aea1c53d4757225e70d19ddd87e7843a25897b3c4f3901a2ab07e04586a5b76a"
+  name = "github.com/lestrrat-go/jwx"
+  packages = [
+    "internal/base64",
+    "internal/option",
+    "jwa",
+    "jwk",
+  ]
+  pruneopts = "NUT"
+  revision = "5d60d87d07ddea9874404944870bec81aabcf574"
+  version = "v0.9.0"
+
+[[projects]]
   branch = "master"
   digest = "1:df495c9184b4e6cbb9d55652236dbcbe72c65a1c8b6469da50722628cea474e7"
   name = "github.com/mailru/easyjson"
@@ -515,14 +631,31 @@
   version = "v1.0.1"
 
 [[projects]]
-  digest = "1:5ef2d6d633123ca3ee230e8628b2fca40b026a8ef3354ecf4d3e0de53c5b1884"
-  name = "github.com/metal-pod/gardener-extension-provider-metal"
+  branch = "master"
+  digest = "1:517c5b58bddeb7a7cba42bb73b5b1274b0d2bd59a3384ecb129b459a2f6f6c99"
+  name = "github.com/metal-pod/metal-go"
   packages = [
-    "pkg/apis/metal",
-    "pkg/apis/metal/v1alpha1",
+    ".",
+    "api/client/firewall",
+    "api/client/image",
+    "api/client/ip",
+    "api/client/machine",
+    "api/client/network",
+    "api/client/partition",
+    "api/client/size",
+    "api/client/switch_operations",
+    "api/models",
   ]
   pruneopts = "NUT"
-  revision = "cd5356483498255a4c2607db01cf8d5298a75a71"
+  revision = "95a5c251d75ddaa7fecf0713d28831584b047c0c"
+
+[[projects]]
+  branch = "master"
+  digest = "1:881b216e88614284cda29875e3a99da6f4b395af1039f13c9c7724551a4113c4"
+  name = "github.com/metal-pod/security"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "319d1b2eca89cd6be42612155055d32decdab8b5"
 
 [[projects]]
   digest = "1:2f3f339e83dac7b41821f00b1d87ae5a725b56798f68f0196404b48b9133e3e6"
@@ -531,6 +664,14 @@
   pruneopts = "NUT"
   revision = "d572b2e8b82726cee9476d1b9d63a7fe9b601ff1"
   version = "v3.1.1"
+
+[[projects]]
+  digest = "1:a45ae66dea4c899d79fceb116accfa1892105c251f0dcd9a217ddc276b42ec68"
+  name = "github.com/mitchellh/mapstructure"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "3536a929edddb9a5b34bd6861dc4a9647cb459fe"
+  version = "v1.1.2"
 
 [[projects]]
   digest = "1:2f42fa12d6911c7b7659738758631bec870b7e9b4c6be5444f963cdcfccc191f"
@@ -750,6 +891,37 @@
   packages = ["."]
   pruneopts = "NUT"
   revision = "48954b6210f8d154cb5f8484d3a3e1f83489309e"
+
+[[projects]]
+  digest = "1:22f696cee54865fb8e9ff91df7b633f6b8f22037a8015253c6b6a71ca82219c7"
+  name = "go.uber.org/atomic"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
+  version = "v1.3.2"
+
+[[projects]]
+  digest = "1:58ca93bdf81bac106ded02226b5395a0595d5346cdc4caa8d9c1f3a5f8f9976e"
+  name = "go.uber.org/multierr"
+  packages = ["."]
+  pruneopts = "NUT"
+  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
+  version = "v1.1.0"
+
+[[projects]]
+  digest = "1:85674ac609b704fd4e9f463553b6ffc3a3527a993ae0ba550eb56beaabdfe094"
+  name = "go.uber.org/zap"
+  packages = [
+    ".",
+    "buffer",
+    "internal/bufferpool",
+    "internal/color",
+    "internal/exit",
+    "zapcore",
+  ]
+  pruneopts = "NUT"
+  revision = "ff33455a0e382e8a81d14dd7c922020b6b5e7982"
+  version = "v1.9.1"
 
 [[projects]]
   digest = "1:ed47bea400ebfd3c4eb7b7497e4004482fea5fc060e7dde85d5f21fcfc272f20"
@@ -1579,19 +1751,18 @@
   revision = "21c4ce38f2a793ec01e925ddc31216500183b773"
 
 [[projects]]
-  digest = "1:59aa217597329931345928e3c256d92ab2f9c5bd29c4f31b7cea8bc67861ec94"
+  digest = "1:8967b39f774886a8d7c4540713fce16adcc868342520e49a194ea0ccdd150312"
   name = "sigs.k8s.io/controller-runtime"
   packages = [
     "pkg/client",
     "pkg/client/apiutil",
     "pkg/client/fake",
-    "pkg/internal/objectutil",
-    "pkg/manager/signals",
+    "pkg/runtime/log",
     "pkg/runtime/signals",
   ]
   pruneopts = "NUT"
-  revision = "f60c87ec713cb8da81257228530605457ebf7220"
-  version = "v0.2.0-beta.2"
+  revision = "12d98582e72927b6cd0123e2b4e819f9341ce62c"
+  version = "v0.1.10"
 
 [[projects]]
   digest = "1:fef5992ddf85e9ccad899b11338339858936a10fbce96b9d5c43767669d95398"
@@ -1645,7 +1816,7 @@
     "github.com/hashicorp/go-multierror",
     "github.com/huandu/xstrings",
     "github.com/json-iterator/go",
-    "github.com/metal-pod/gardener-extension-provider-metal/pkg/apis/metal/v1alpha1",
+    "github.com/metal-pod/metal-go",
     "github.com/mholt/archiver",
     "github.com/onsi/ginkgo",
     "github.com/onsi/ginkgo/extensions/table",
