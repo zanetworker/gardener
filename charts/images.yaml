@@ -86,7 +86,7 @@ images:
   sourceRepository: github.com/danderson/metallb
   repository: metallb/speaker
   tag: v0.7.3
-- name:  metallb-controller
+- name: metallb-controller
   sourceRepository: github.com/danderson/metallb
   repository: metallb/controller
   tag: v0.7.3

@@ -27,7 +27,7 @@ spec:
       hostNetwork: true
       containers:
         - name: speaker
-          image:  {{ index .Values.images "metallb-speaker" }}
+          image:  {{ index .Values.images "metallb" }}
           imagePullPolicy: IfNotPresent
           args:
             - --port=7472
@@ -53,7 +53,6 @@ spec:
                 - all
               add:
                 - net_raw
-
 ---
 apiVersion: apps/v1beta2
 kind: Deployment
@@ -86,7 +85,7 @@ spec:
         runAsUser: 65534 # nobody
       containers:
         - name: controller
-          image: {{ index .Values.images "metallb-controller" }}
+          image: {{ index .Values.images "metallb" }}
           imagePullPolicy: IfNotPresent
           args:
             - --port=7472
@@ -105,4 +104,3 @@ spec:
               drop:
                 - all
             readOnlyRootFilesystem: true
-
