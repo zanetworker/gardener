@@ -139,6 +139,11 @@ spec:
             # Auto-detect the BGP IP address.
             - name: IP
               value: "autodetect"
+            {{- if .Values.cloudProvider "metal"}}
+            # On metal the ip is bound to the lo interface (routing to the host).
+            - name: IP_AUTODETECTION_METHOD
+              value: "interface=lo"
+            {{- end }}
             # Disable IPV6 on Kubernetes.
             - name: FELIX_IPV6SUPPORT
               value: "false"
