@@ -23,9 +23,9 @@ import (
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/awsbotanist"
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/azurebotanist"
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/gcpbotanist"
+	"github.com/gardener/gardener/pkg/operation/cloudbotanist/metalbotanist"
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/openstackbotanist"
 	"github.com/gardener/gardener/pkg/operation/cloudbotanist/packetbotanist"
-	"github.com/gardener/gardener/pkg/operation/cloudbotanist/metalbotanist"
 	"github.com/gardener/gardener/pkg/operation/common"
 )
 
@@ -58,7 +58,7 @@ func New(o *operation.Operation, purpose string) (CloudBotanist, error) {
 	case gardenv1beta1.CloudProviderPacket:
 		return packetbotanist.New(o, purpose)
 	case gardenv1beta1.CloudProviderMetal:
-		return metalbotanist.New(o, purpose)	
+		return metalbotanist.New(o, purpose)
 	default:
 		return nil, errors.New("unsupported cloud provider")
 	}

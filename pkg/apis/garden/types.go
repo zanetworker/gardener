@@ -79,7 +79,7 @@ type CloudProfileSpec struct {
 	// Packet is the profile specification for the Packet cloud.
 	// +optional
 	Packet *PacketProfile
-    // Metal is the profile specification for Metal.
+	// Metal is the profile specification for Metal.
 	// +optional
 	Metal *MetalProfile
 	// CABundle is a certificate bundle which will be installed onto every host machine of the Shoot cluster.
@@ -281,12 +281,12 @@ type MetalProfile struct {
 	Constraints MetalConstraints
 }
 
- // MetalConstraints is an object containing constraints for certain values in the Shoot specification.
+// MetalConstraints is an object containing constraints for certain values in the Shoot specification.
 type MetalConstraints struct {
 	// DNSProviders contains constraints regarding allowed values of the 'dns.provider' block in the Shoot specification.
 	DNSProviders []DNSProviderConstraint
 	// Kubernetes contains constraints regarding allowed values of the 'kubernetes' block in the Shoot specification.
-	Kubernetes KubernetesConstraints 
+	Kubernetes KubernetesConstraints
 	// LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
 	LoadBalancerProviders []MetalLoadBalancerProvider
 	// MachineImages contains constraints regarding allowed values for machine images in the Shoot specification.
@@ -297,7 +297,7 @@ type MetalConstraints struct {
 	Zones []Zone
 }
 
- // LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
+// LoadBalancerProviders contains constraints regarding allowed values of the 'loadBalancerProvider' block in the Shoot specification.
 type MetalLoadBalancerProvider struct {
 	// Name is the name of the load balancer provider.
 	Name string
@@ -900,12 +900,12 @@ type MetalCloud struct {
 	Zones []string
 }
 
- // MetalNetworks holds information about the Kubernetes and infrastructure networks.
+// MetalNetworks holds information about the Kubernetes and infrastructure networks.
 type MetalNetworks struct {
 	gardencore.K8SNetworks `json:",inline"`
 }
 
- // MetalWorker is the definition of a worker group.
+// MetalWorker is the definition of a worker group.
 type MetalWorker struct {
 	Worker `json:",inline"`
 }
@@ -1149,11 +1149,19 @@ type Monocular struct {
 	Addon
 }
 
-// MetalLB describes configuration values for the metallb loadalancer
+// MetalLB describes configuration values for the metallb addon.
 type MetalLB struct {
-	Addon
-	// ExternalNetwork is the configuration for MetalLB externalNetwork
-	ExternalNetwork string
+	Addon `json:",inline"`
+	// Networks is the configuration for MetalLB networks.
+	Networks []MetalLBNetwork `json:"networks,omitempty"`
+}
+
+// MetalLBNetwork contains the network name and number of IPs to acquire.
+type MetalLBNetwork struct {
+	// Name is the name of the network.
+	Name string `json:"name"`
+	// Count is the number of IPs to acquire.
+	Count int `json:"count"`
 }
 
 // KubeLego describes configuration values for the kube-lego addon.

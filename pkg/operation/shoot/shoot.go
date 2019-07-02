@@ -305,6 +305,11 @@ func (s *Shoot) NginxIngressEnabled() bool {
 	return s.Info.Spec.Addons != nil && s.Info.Spec.Addons.NginxIngress != nil && s.Info.Spec.Addons.NginxIngress.Enabled
 }
 
+// MetalLBEnabled returns true if the metallb addon is enabled in the Shoot manifest.
+func (s *Shoot) MetalLBEnabled() bool {
+	return s.Info.Spec.Addons != nil && s.Info.Spec.Addons.MetalLB != nil && s.Info.Spec.Addons.MetalLB.Enabled
+}
+
 // ComputeCloudConfigSecretName computes the name for a secret which contains the original cloud config for
 // the worker group with the given <workerName>. It is build by the cloud config secret prefix, the worker
 // name itself and a hash of the minor Kubernetes version of the Shoot cluster.

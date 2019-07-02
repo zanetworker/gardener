@@ -122,7 +122,7 @@ func SetDefaults_Shoot(obj *Shoot) {
 			obj.Spec.Cloud.Metal.Networks.Services = &defaultServiceCIDR
 		}
 	}
-	
+
 	trueVar := true
 	if obj.Spec.Kubernetes.AllowPrivilegedContainers == nil {
 		obj.Spec.Kubernetes.AllowPrivilegedContainers = &trueVar

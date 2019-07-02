@@ -99,21 +99,6 @@ func (b *MetalBotanist) GenerateCSIConfig() (map[string]interface{}, error) {
 	return nil, nil
 }
 
-// maps are mutable, so it's safer to create a new instance
-func getMetalCredentialsEnvironment() []map[string]interface{} {
-	return []map[string]interface{}{
-		{
-			"name": "METAL_API_HMAC",
-			"valueFrom": map[string]interface{}{
-				"secretKeyRef": map[string]interface{}{
-					"key":  MetalAPIHMac,
-					"name": gardencorev1alpha1.SecretNameCloudProvider,
-				},
-			},
-		},
-	}
-}
-
 // GenerateEtcdBackupConfig returns the etcd backup configuration for the etcd Helm chart.
 func (b *MetalBotanist) GenerateEtcdBackupConfig() (map[string][]byte, map[string]interface{}, error) {
 	secretData := map[string][]byte{}
@@ -136,4 +121,48 @@ func (b *MetalBotanist) GenerateETCDStorageClassConfig() map[string]interface{} 
 // DeployCloudSpecificControlPlane does any last minute updates
 func (b *MetalBotanist) DeployCloudSpecificControlPlane() error {
 	return nil
+}
+
+// maps are mutable, so it's safer to create a new instance
+func getMetalCredentialsEnvironment() []map[string]interface{} {
+	secretKeyRefName := gardencorev1alpha1.SecretNameCloudProvider
+
+	return []map[string]interface{}{
+		{
+			"name": "METAL_TENANT_ID",
+			"valueFrom": map[string]interface{}{
+				"secretKeyRef": map[string]interface{}{
+					"name": secretKeyRefName,
+					"key":  MetalTenantID,
+				},
+			},
+		},
+		{
+			"name": "METAL_API_URL",
+			"valueFrom": map[string]interface{}{
+				"secretKeyRef": map[string]interface{}{
+					"name": secretKeyRefName,
+					"key":  MetalAPIURL,
+				},
+			},
+		},
+		{
+			"name": "METAL_API_KEY",
+			"valueFrom": map[string]interface{}{
+				"secretKeyRef": map[string]interface{}{
+					"name": secretKeyRefName,
+					"key":  MetalAPIKey,
+				},
+			},
+		},
+		{
+			"name": "METAL_API_HMAC",
+			"valueFrom": map[string]interface{}{
+				"secretKeyRef": map[string]interface{}{
+					"name": secretKeyRefName,
+					"key":  MetalAPIHMac,
+				},
+			},
+		},
+	}
 }

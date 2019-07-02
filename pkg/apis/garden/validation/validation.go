@@ -951,8 +951,8 @@ func validateAddons(addons *garden.Addons, fldPath *field.Path) field.ErrorList 
 	}
 
 	if addons.MetalLB != nil && addons.MetalLB.Enabled {
-		if externalNetwork := addons.MetalLB.ExternalNetwork; len(externalNetwork) == 0 {
-			allErrs = append(allErrs, field.Invalid(fldPath.Child("metallb", "externalNetwork"), externalNetwork, "must provide an external network for metallb configuration"))
+		if networks := addons.MetalLB.Networks; len(networks) == 0 {
+			allErrs = append(allErrs, field.Invalid(fldPath.Child("metallb", "networks"), networks, "must provide an external network for metallb configuration"))
 		}
 	}
 

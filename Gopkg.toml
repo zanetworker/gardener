@@ -95,7 +95,7 @@ ignored = [
 
 [[constraint]]
   name = "github.com/gardener/machine-controller-manager"
-  revision = "4a824c6ef5810f8e11bd4480a519b7d17ba26ecc"
+  revision = "e95a18defae11c83c638d2a834c5ed0b76ed87d6"
   source = "github.com/majst01/machine-controller-manager"
 
 [[constraint]]
@@ -163,6 +163,10 @@ ignored = [
 [[constraint]]
   name = "golang.org/x/crypto"
   revision = "a5d413f7728c81fb97d96a2b722368945f651e78"
+
+[[constraint]]
+  branch = "master"
+  name = "github.com/metal-pod/metal-go"
 
 # use the same version that is referenced by k8s.io, mainly required by Helm
 # https://github.com/kubernetes/kubernetes/blob/v1.13.1/Godeps/Godeps.json#L2996

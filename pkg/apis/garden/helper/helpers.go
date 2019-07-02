@@ -105,4 +105,3 @@ func DetermineCloudProviderInShoot(cloudObj garden.Cloud) (garden.CloudProvider,
 	}
 	return cloud, nil
 }
-

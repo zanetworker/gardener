@@ -1,14 +1,18 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  namespace: kube-system
+  namespace: metallb-system
   name: metallb-config
   labels:
     addonmanager.kubernetes.io/mode: Reconcile
 data:
   config: |
     address-pools:
-    - name: default
+    {{- range $name, $ips := .Values.metallb }}
+    - name: "{{ $name }}"
       protocol: layer2
       addresses:
-      - "{{ .Values.externalNetwork }}"
+      {{- range $index, $ip := $ips }}
+      - "{{ $ip }}"
+      {{- end }}
+    {{- end }}
