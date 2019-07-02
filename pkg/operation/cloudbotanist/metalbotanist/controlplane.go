@@ -146,15 +146,15 @@ func getMetalCredentialsEnvironment() []map[string]interface{} {
 				},
 			},
 		},
-		{
-			"name": "METAL_API_KEY",
-			"valueFrom": map[string]interface{}{
-				"secretKeyRef": map[string]interface{}{
-					"name": secretKeyRefName,
-					"key":  MetalAPIKey,
-				},
-			},
-		},
+		// {
+		// 	"name": "METAL_API_KEY",
+		// 	"valueFrom": map[string]interface{}{
+		// 		"secretKeyRef": map[string]interface{}{
+		// 			"name": secretKeyRefName,
+		// 			"key":  MetalAPIKey,
+		// 		},
+		// 	},
+		// },
 		{
 			"name": "METAL_API_HMAC",
 			"valueFrom": map[string]interface{}{

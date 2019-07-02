@@ -168,6 +168,38 @@ ignored = [
   branch = "master"
   name = "github.com/metal-pod/metal-go"
 
+[[override]]
+  name = "github.com/go-openapi/analysis"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/errors"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/jsonpointer"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/jsonreference"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/loads"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/runtime"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/spec"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/strfmt"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/swag"
+  version = "0.19.0"
+[[override]]
+  name = "github.com/go-openapi/validate"
+  version = "0.19.0"
+  
+  
 # use the same version that is referenced by k8s.io, mainly required by Helm
 # https://github.com/kubernetes/kubernetes/blob/v1.13.1/Godeps/Godeps.json#L2996
 [[override]]

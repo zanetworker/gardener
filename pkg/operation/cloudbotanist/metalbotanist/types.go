@@ -20,7 +20,7 @@ import (
 
 const (
 	// MetalTenantID is a constant for the metal tenant id.
-	MetalTenantID = "metalTenantID"
+	MetalTenantID = "tenant"
 	// MetalAPIURL is a constant for the url of metal-api.
 	MetalAPIURL = "metalAPIURL"
 	// MetalAPIKey is a constant for the key in a cloud provider secret and backup secret that holds the Metal API key

@@ -16,10 +16,11 @@ package metalbotanist
 
 import (
 	"fmt"
+	"strings"
+
 	"github.com/gardener/gardener/pkg/operation/common"
 	"github.com/gardener/machine-controller-manager/pkg/apis/machine/v1alpha1"
 	metalgo "github.com/metal-pod/metal-go"
-	"strings"
 )
 
 // DeployKube2IAMResources - Not needed on Metal
@@ -86,7 +87,7 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 	for _, nw := range networks {
 		findReq := &metalgo.NetworkFindRequest{
 			ProjectID: &projectId,
-			Name:  &nw.Name,
+			Name:      &nw.Name,
 		}
 		resp, err := svc.NetworkFind(findReq)
 		if err != nil {
@@ -104,9 +105,9 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 		var ips []string
 		for i := 0; i < nw.Count; i++ {
 			req := &metalgo.IPAcquireRequest{
-				Projectid: projectId,
-				Networkid: *network.ID,
-				Name: fmt.Sprintf("metallb-%s-%d", nw.Name, i+1),
+				Projectid:   projectId,
+				Networkid:   *network.ID,
+				Name:        fmt.Sprintf("metallb-%s-%d", nw.Name, i+1),
 				Description: b.Shoot.Info.Namespace,
 			}
 			ipa, err := svc.IPAcquire(req)
@@ -127,13 +128,7 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 
 // GenerateVPNShootConfig generate cloud-specific vpn override - Metal determines the config dynamically by querying
 func (b *MetalBotanist) GenerateVPNShootConfig() (map[string]interface{}, error) {
-	kv := map[string]interface{}{
-		"image": "metalhost/metabot:latest", "args": []string{"ip", "4", "private", "parent", "network"},
-	}
-	config := map[string]interface{}{
-		"initContainers": []map[string]interface{}{kv},
-	}
-	return config, nil
+	return nil, nil
 }
 
 // Helper function to create SVC
