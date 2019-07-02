@@ -256,14 +256,14 @@
   revision = "f09dd7bc8d2fee9f4cfff1d95d39e7713728bf81"
 
 [[projects]]
-  digest = "1:ee70d8afe5ef02ac7f728509893cb861fd0f0869082ad1b712ce5b0784069418"
+  digest = "1:a676ddad7b2e2a264858a07ec12683e81f3599856a90ac230341cef55824f609"
   name = "github.com/gardener/machine-controller-manager"
   packages = [
     "pkg/apis/machine",
     "pkg/apis/machine/v1alpha1",
   ]
   pruneopts = "NUT"
-  revision = "052c7e8a36509a335e8fa830299d54de226b7999"
+  revision = "e95a18defae11c83c638d2a834c5ed0b76ed87d6"
   source = "github.com/majst01/machine-controller-manager"
 
 [[projects]]
@@ -292,22 +292,6 @@
   pruneopts = "NUT"
   revision = "c85607071cf08ca1adaf48319cd1aa322e81d8c1"
   version = "v1.42.0"
-
-[[projects]]
-  digest = "1:53becd66889185091b58ea3fc49294996f2179fb05a89702f4de7d15e581b509"
-  name = "github.com/go-logr/logr"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "9fb12b3b21c5415d16ac18dc5cd42c1cfdd40c4e"
-  version = "v0.1.0"
-
-[[projects]]
-  digest = "1:340497a512995aa69c0add901d79a2096b3449d35a44a6f1f1115091a9f8c687"
-  name = "github.com/go-logr/zapr"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "03f06a783fbb7dfaf3f629c7825480e43a7105e6"
-  version = "v0.1.1"
 
 [[projects]]
   digest = "1:e101aa2e25fac7e82ba4d2f66807eedd4bcf11abc5afcb4a4629a88f9a652b84"
@@ -631,6 +615,16 @@
   version = "v1.0.1"
 
 [[projects]]
+  digest = "1:5ef2d6d633123ca3ee230e8628b2fca40b026a8ef3354ecf4d3e0de53c5b1884"
+  name = "github.com/metal-pod/gardener-extension-provider-metal"
+  packages = [
+    "pkg/apis/metal",
+    "pkg/apis/metal/v1alpha1",
+  ]
+  pruneopts = "NUT"
+  revision = "cd5356483498255a4c2607db01cf8d5298a75a71"
+
+[[projects]]
   branch = "master"
   digest = "1:517c5b58bddeb7a7cba42bb73b5b1274b0d2bd59a3384ecb129b459a2f6f6c99"
   name = "github.com/metal-pod/metal-go"
@@ -893,37 +887,6 @@
   revision = "48954b6210f8d154cb5f8484d3a3e1f83489309e"
 
 [[projects]]
-  digest = "1:22f696cee54865fb8e9ff91df7b633f6b8f22037a8015253c6b6a71ca82219c7"
-  name = "go.uber.org/atomic"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "1ea20fb1cbb1cc08cbd0d913a96dead89aa18289"
-  version = "v1.3.2"
-
-[[projects]]
-  digest = "1:58ca93bdf81bac106ded02226b5395a0595d5346cdc4caa8d9c1f3a5f8f9976e"
-  name = "go.uber.org/multierr"
-  packages = ["."]
-  pruneopts = "NUT"
-  revision = "3c4937480c32f4c13a875a1829af76c98ca3d40a"
-  version = "v1.1.0"
-
-[[projects]]
-  digest = "1:85674ac609b704fd4e9f463553b6ffc3a3527a993ae0ba550eb56beaabdfe094"
-  name = "go.uber.org/zap"
-  packages = [
-    ".",
-    "buffer",
-    "internal/bufferpool",
-    "internal/color",
-    "internal/exit",
-    "zapcore",
-  ]
-  pruneopts = "NUT"
-  revision = "ff33455a0e382e8a81d14dd7c922020b6b5e7982"
-  version = "v1.9.1"
-
-[[projects]]
   digest = "1:ed47bea400ebfd3c4eb7b7497e4004482fea5fc060e7dde85d5f21fcfc272f20"
   name = "golang.org/x/crypto"
   packages = [
@@ -953,7 +916,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:21925db9085bc61c3b0996536d2abf2edbde6bad4da163f3edb3f204f2f28367"
+  digest = "1:3dbfa5a9f1956d6e3cd78403b9e1a1e2b9e64ed15f2b82d697e77344425e475e"
   name = "golang.org/x/net"
   packages = [
     "context",
@@ -1041,7 +1004,7 @@
 
 [[projects]]
   branch = "master"
-  digest = "1:be1ab6d2b333b1d487c01f1328aef9dc76cee4ff4f780775a552d2a1653f0207"
+  digest = "1:71850ac10bbeb4d8dd06ce0743fe57654daf28510b0f6cbd9692aaf0d269360e"
   name = "golang.org/x/tools"
   packages = [
     "go/ast/astutil",
@@ -1751,18 +1714,19 @@
   revision = "21c4ce38f2a793ec01e925ddc31216500183b773"
 
 [[projects]]
-  digest = "1:8967b39f774886a8d7c4540713fce16adcc868342520e49a194ea0ccdd150312"
+  digest = "1:39cdc81611d8447f5c30aba048d8f23f01294be65ee4cfbe028784c8fbca8b13"
   name = "sigs.k8s.io/controller-runtime"
   packages = [
     "pkg/client",
     "pkg/client/apiutil",
     "pkg/client/fake",
-    "pkg/runtime/log",
+    "pkg/internal/objectutil",
+    "pkg/manager/signals",
     "pkg/runtime/signals",
   ]
   pruneopts = "NUT"
-  revision = "12d98582e72927b6cd0123e2b4e819f9341ce62c"
-  version = "v0.1.10"
+  revision = "aeaf98d864800cd805f87e49d6fb64d449aaba95"
+  version = "v0.2.0-beta.3"
 
 [[projects]]
   digest = "1:fef5992ddf85e9ccad899b11338339858936a10fbce96b9d5c43767669d95398"
@@ -1816,6 +1780,7 @@
     "github.com/hashicorp/go-multierror",
     "github.com/huandu/xstrings",
     "github.com/json-iterator/go",
+    "github.com/metal-pod/gardener-extension-provider-metal/pkg/apis/metal/v1alpha1",
     "github.com/metal-pod/metal-go",
     "github.com/mholt/archiver",
     "github.com/onsi/ginkgo",
