@@ -15,6 +15,8 @@
 package metalbotanist
 
 import (
+	"fmt"
+
 	gardencorev1alpha1 "github.com/gardener/gardener/pkg/apis/core/v1alpha1"
 	"github.com/gardener/gardener/pkg/operation/common"
 )
@@ -47,7 +49,12 @@ func (b *MetalBotanist) GenerateKubeAPIServerServiceConfig() (map[string]interfa
 // GenerateKubeAPIServerExposeConfig defines the cloud provider specific values which configure how the kube-apiserver
 // is exposed to the public.
 func (b *MetalBotanist) GenerateKubeAPIServerExposeConfig() (map[string]interface{}, error) {
-	return map[string]interface{}{}, nil
+	return map[string]interface{}{
+		"advertiseAddress": b.APIServerAddress,
+		"additionalParameters": []string{
+			fmt.Sprintf("--external-hostname=%s", b.APIServerAddress),
+		},
+	}, nil
 }
 
 // GenerateKubeAPIServerConfig generates the cloud provider specific values which are required to render the
