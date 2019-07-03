@@ -139,7 +139,7 @@ spec:
             # Auto-detect the BGP IP address.
             - name: IP
               value: "autodetect"
-            {{- if .Values.cloudProvider "metal"}}
+            {{- if eq .Values.cloudProvider "metal"}}
             # On metal the ip is bound to the lo interface (routing to the host).
             - name: IP_AUTODETECTION_METHOD
               value: "interface=lo"
