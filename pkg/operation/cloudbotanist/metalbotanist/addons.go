@@ -87,7 +87,7 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 	for _, nw := range networks {
 		findReq := &metalgo.NetworkFindRequest{
 			ProjectID: &projectId,
-			Name:      &nw.Name,
+			ID:        &nw.Name,
 		}
 		resp, err := svc.NetworkFind(findReq)
 		if err != nil {
