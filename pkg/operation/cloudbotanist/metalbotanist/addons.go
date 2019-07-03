@@ -80,21 +80,20 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 
 	// find corresponding network
 	networks := b.Shoot.Info.Spec.Addons.MetalLB.Networks
-	projectId := b.Shoot.Info.Status.TechnicalID
+	projectID := b.Shoot.Info.Status.TechnicalID
 
 	mlb := make(map[string]interface{})
 
 	for _, nw := range networks {
 		findReq := &metalgo.NetworkFindRequest{
-			ProjectID: &projectId,
-			ID:        &nw.Name,
+			ID: &nw.Name,
 		}
 		resp, err := svc.NetworkFind(findReq)
 		if err != nil {
 			return nil, err
 		}
 		if len(resp.Networks) == 0 {
-			return nil, fmt.Errorf("cannot find network with prefix %q", networks)
+			return nil, fmt.Errorf("cannot find network with id %s", nw.Name)
 		}
 		if len(resp.Networks) > 1 {
 			return nil, fmt.Errorf("%d networks found with prefix %q", len(resp.Networks), networks)
@@ -105,7 +104,7 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 		var ips []string
 		for i := 0; i < nw.Count; i++ {
 			req := &metalgo.IPAcquireRequest{
-				Projectid:   projectId,
+				Projectid:   projectID,
 				Networkid:   *network.ID,
 				Name:        fmt.Sprintf("metallb-%s-%d", nw.Name, i+1),
 				Description: b.Shoot.Info.Namespace,
