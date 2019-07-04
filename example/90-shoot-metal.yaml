@@ -153,3 +153,10 @@ spec:
     # Please do not use this field anymore.
     monocular:
       enabled: false
+    # MetalLB is a addon that provides a type LoadBalancer on bare metal.
+    metallb:
+      enabled: true
+      networks:
+        -
+          name: internet-nbg-w8101
+          count: 4
