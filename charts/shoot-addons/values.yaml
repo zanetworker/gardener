@@ -17,11 +17,6 @@ nginx-ingress:
     ingress-default-backend: image-repository:image-tag
 metallb:
   enabled: false
-  networks:
-    - name: mpls
-      count: 4
-    - name: internet
-      count: 4
   images:
     metallb-speaker: image-repository:image-tag
     metallb-controller: image-repository:image-tag
