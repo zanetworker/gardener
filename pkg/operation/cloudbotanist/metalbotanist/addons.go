@@ -120,7 +120,9 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 		mlb[nw.Name] = ips
 	}
 
-	return common.GenerateAddonConfig(mlb, true), nil
+	return common.GenerateAddonConfig(map[string]interface{}{
+		"config": mlb,
+	}, true), nil
 }
 
 // GenerateVPNShootConfig generate cloud-specific vpn override - Metal determines the config dynamically by querying

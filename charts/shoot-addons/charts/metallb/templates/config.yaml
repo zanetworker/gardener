@@ -8,7 +8,7 @@ metadata:
 data:
   config: |
     address-pools:
-    {{- range $name, $ips := .Values.metallb }}
+    {{- range $name, $ips := .Values.config }}
     - name: "{{ $name }}"
       protocol: layer2
       addresses:
