@@ -1,8 +1,7 @@
-networks:
-  - name: mpls
-    count: 4
-  - name: internet
-    count: 4
+config:
+  network:
+    - ip1
+    - ...
 images:
   metallb-speaker: image-repository:image-tag
   metallb-controller: image-repository:image-tag

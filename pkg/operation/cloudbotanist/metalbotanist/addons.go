@@ -70,7 +70,7 @@ func (b *MetalBotanist) GenerateNginxIngressConfig() (map[string]interface{}, er
 // GenerateMetalLBConfig generates values which are required to render the chart metallb properly.
 func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) {
 	if !b.Shoot.MetalLBEnabled() {
-		return common.GenerateAddonConfig(nil, false), nil
+		return common.GenerateAddonConfig(nil, b.Shoot.MetalLBEnabled()), nil
 	}
 
 	svc, err := b.createSVC()
@@ -100,14 +100,27 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 		}
 		network := resp.Networks[0]
 
-		// acquire network IPs
 		var ips []string
-		for i := 0; i < nw.Count; i++ {
+		ipFindReq := &metalgo.IPFindRequest{
+			ProjectID: &projectID,
+		}
+		ipResp, err := svc.IPFind(ipFindReq)
+		if err != nil {
+			return nil, err
+		}
+		for _, ipa := range ipResp.IPs {
+			ips = append(ips, *ipa.Ipaddress)
+		}
+
+		currentIPCount := len(ipResp.IPs)
+		wantedIPCount := nw.Count
+
+		// acquire network IPs
+		for i := currentIPCount; i < wantedIPCount; i++ {
 			req := &metalgo.IPAcquireRequest{
-				Projectid:   projectID,
-				Networkid:   *network.ID,
-				Name:        fmt.Sprintf("metallb-%s-%d", nw.Name, i+1),
-				Description: b.Shoot.Info.Namespace,
+				Projectid: projectID,
+				Networkid: *network.ID,
+				Name:      fmt.Sprintf("metallb-%d", i+1),
 			}
 			ipa, err := svc.IPAcquire(req)
 			if err != nil {
@@ -122,7 +135,7 @@ func (b *MetalBotanist) GenerateMetalLBConfig() (map[string]interface{}, error) 
 
 	return common.GenerateAddonConfig(map[string]interface{}{
 		"config": mlb,
-	}, true), nil
+	}, b.Shoot.MetalLBEnabled()), nil
 }
 
 // GenerateVPNShootConfig generate cloud-specific vpn override - Metal determines the config dynamically by querying
