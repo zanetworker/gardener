@@ -3307,6 +3307,8 @@ func Convert_garden_MaintenanceTimeWindow_To_v1beta1_MaintenanceTimeWindow(in *g
 func autoConvert_v1beta1_MetalCloud_To_garden_MetalCloud(in *MetalCloud, out *garden.MetalCloud, s conversion.Scope) error {
 	out.LoadBalancerProvider = in.LoadBalancerProvider
 	out.MachineImage = (*garden.MachineImage)(unsafe.Pointer(in.MachineImage))
+	out.FirewallImage = in.FirewallImage
+	out.FirewallSize = in.FirewallSize
 	if err := Convert_v1beta1_MetalNetworks_To_garden_MetalNetworks(&in.Networks, &out.Networks, s); err != nil {
 		return err
 	}
@@ -3333,6 +3335,8 @@ func Convert_v1beta1_MetalCloud_To_garden_MetalCloud(in *MetalCloud, out *garden
 func autoConvert_garden_MetalCloud_To_v1beta1_MetalCloud(in *garden.MetalCloud, out *MetalCloud, s conversion.Scope) error {
 	out.LoadBalancerProvider = in.LoadBalancerProvider
 	out.MachineImage = (*MachineImage)(unsafe.Pointer(in.MachineImage))
+	out.FirewallImage = in.FirewallImage
+	out.FirewallSize = in.FirewallSize
 	if err := Convert_garden_MetalNetworks_To_v1beta1_MetalNetworks(&in.Networks, &out.Networks, s); err != nil {
 		return err
 	}
@@ -3463,6 +3467,7 @@ func autoConvert_v1beta1_MetalNetworks_To_garden_MetalNetworks(in *MetalNetworks
 	if err := s.Convert(&in.K8SNetworks, &out.K8SNetworks, 0); err != nil {
 		return err
 	}
+	out.Additional = *(*[]string)(unsafe.Pointer(&in.Additional))
 	return nil
 }
 
@@ -3476,6 +3481,7 @@ func autoConvert_garden_MetalNetworks_To_v1beta1_MetalNetworks(in *garden.MetalN
 	if err := s.Convert(&in.K8SNetworks, &out.K8SNetworks, 0); err != nil {
 		return err
 	}
+	out.Additional = *(*[]string)(unsafe.Pointer(&in.Additional))
 	return nil
 }
 

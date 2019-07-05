@@ -38,20 +38,10 @@ func GardenV1beta1ShootToMetalV1alpha1InfrastructureConfig(shoot *gardenv1beta1.
 			Kind:       infrastructureConfig,
 		},
 		Firewall: metalv1alpha1.Firewall{
-			// FIXME Shoot Spec must have firewall defaults
-			Size:      shoot.Spec.Cloud.Metal.Workers[0].MachineType,
-			Image:     "firewall-1",
-			Networks:  []string{"internet-nbg-w8101", "underlay-nbg-w8101"},
-			Partition: shoot.Spec.Cloud.Metal.Zones[0],
+			Size:      shoot.Spec.Cloud.Metal.FirewallSize,
+			Image:     shoot.Spec.Cloud.Metal.FirewallImage,
+			Networks:  shoot.Spec.Cloud.Metal.Networks.Additional,
+			Partition: shoot.Spec.Cloud.Metal.Zones[0], // TODO: This is kind of questionable...
 		},
 	}, nil
 }
-
-// kind: InfrastructureConfig
-// firewall:
-//   partition: nbg-w8101
-//   size: c1-xlarge-x86
-//   image: firewall-1
-//   networks:
-// 	- internet-nbg-w8101
-// 	- underlay-nbg-w8101

@@ -4526,6 +4526,20 @@ func schema_pkg_apis_garden_v1beta1_MetalCloud(ref common.ReferenceCallback) com
 							Ref:         ref("github.com/gardener/gardener/pkg/apis/garden/v1beta1.MachineImage"),
 						},
 					},
+					"firewallImage": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FirewallImage is the image of the firewall to use",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
+					"firewallSize": {
+						SchemaProps: spec.SchemaProps{
+							Description: "FirewallSize is the size of the firewall machine",
+							Type:        []string{"string"},
+							Format:      "",
+						},
+					},
 					"networks": {
 						SchemaProps: spec.SchemaProps{
 							Description: "Networks holds information about the Kubernetes and infrastructure networks.",
@@ -4560,7 +4574,7 @@ func schema_pkg_apis_garden_v1beta1_MetalCloud(ref common.ReferenceCallback) com
 						},
 					},
 				},
-				Required: []string{"loadBalancerProvider", "networks", "workers", "zones"},
+				Required: []string{"loadBalancerProvider", "firewallImage", "firewallSize", "networks", "workers", "zones"},
 			},
 		},
 		Dependencies: []string{
@@ -4768,7 +4782,22 @@ func schema_pkg_apis_garden_v1beta1_MetalNetworks(ref common.ReferenceCallback) 
 							Format:      "",
 						},
 					},
+					"additional": {
+						SchemaProps: spec.SchemaProps{
+							Description: "Additional are additional networks that the infrastructure gets connected with",
+							Type:        []string{"array"},
+							Items: &spec.SchemaOrArray{
+								Schema: &spec.Schema{
+									SchemaProps: spec.SchemaProps{
+										Type:   []string{"string"},
+										Format: "",
+									},
+								},
+							},
+						},
+					},
 				},
+				Required: []string{"additional"},
 			},
 		},
 	}

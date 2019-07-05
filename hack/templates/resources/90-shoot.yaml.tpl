@@ -264,6 +264,8 @@ spec:
       machineImage:
         name: "metal"
         image: "ubuntu-19.04"
+      firewallImage: "firewall-1"
+      firewallSize: "c1-large-x86"
       zones: ${value("spec.cloud.metal.zones", ["nbg-w8101"])}
     % endif
     % if cloud == "openstack" or cloud == "os":

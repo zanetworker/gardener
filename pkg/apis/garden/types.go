@@ -892,6 +892,10 @@ type MetalCloud struct {
 	// value has been provided.
 	// +optional
 	MachineImage *MachineImage
+	// FirewallImage is the image of the firewall to use
+	FirewallImage string
+	// FirewallSize is the size of the firewall machine
+	FirewallSize string
 	// Networks holds information about the Kubernetes and infrastructure networks.
 	Networks MetalNetworks
 	// Workers is a list of worker groups.
@@ -902,7 +906,9 @@ type MetalCloud struct {
 
 // MetalNetworks holds information about the Kubernetes and infrastructure networks.
 type MetalNetworks struct {
-	gardencore.K8SNetworks `json:",inline"`
+	gardencore.K8SNetworks
+	// Additional are additional networks that the infrastructure gets connected with
+	Additional []string
 }
 
 // MetalWorker is the definition of a worker group.

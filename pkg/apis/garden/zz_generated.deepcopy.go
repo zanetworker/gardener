@@ -2058,6 +2058,11 @@ func (in *MetalLoadBalancerProvider) DeepCopy() *MetalLoadBalancerProvider {
 func (in *MetalNetworks) DeepCopyInto(out *MetalNetworks) {
 	*out = *in
 	in.K8SNetworks.DeepCopyInto(&out.K8SNetworks)
+	if in.Additional != nil {
+		in, out := &in.Additional, &out.Additional
+		*out = make([]string, len(*in))
+		copy(*out, *in)
+	}
 	return
 }
 
